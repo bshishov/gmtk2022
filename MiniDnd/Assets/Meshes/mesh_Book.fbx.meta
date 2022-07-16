@@ -16,6 +16,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: mat_Book_Angle_gold
+    second: {fileID: 2100000, guid: d8523d15e2bba4f4abe21d0eee4b7662, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: mat_Book_Angles
     second: {fileID: 2100000, guid: a0d3c8a270592494d9a926c999100b15, type: 2}
   - first:
@@ -86,35 +91,6 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 39
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: arm_Book|anim_idle
-      takeName: arm_Book|anim_Pageturn
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 0
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
