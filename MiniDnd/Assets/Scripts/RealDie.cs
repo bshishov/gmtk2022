@@ -39,7 +39,6 @@ public class RealDie : MonoBehaviour
     private float _lastSoundPlayedTime;
     
     // HoverAnimation
-    private Vector3 _hoverStartPosition;
     private Vector3 _hoverTargetPosition;
     private float _hoverProgress;
 
@@ -75,7 +74,7 @@ public class RealDie : MonoBehaviour
         _body.isKinematic = false;
         
         Debug.Log($"Throwing cube {impulse}");
-        _body.AddForceAtPosition(impulse, transform.position + new Vector3(0, YOffset, 0));
+        _body.AddForceAtPosition(impulse, transform.position + new Vector3(0, YOffset + 2, 0));
 
         var sound = SoundManager.Instance.Play(ThrowSound);
         if (sound != null)
@@ -89,22 +88,11 @@ public class RealDie : MonoBehaviour
         t.rotation = _startRotation;
         _body.velocity = Vector3.zero;
         _body.angularVelocity = Vector3.zero;
+        State = DieState.Idle;
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var direction = new Vector3(Random.Range(0.2f, 1f), YDirection, Random.Range(0.2f, 1f));
-            ResetToOriginalPosition();
-            Throw(direction * ThrowForce);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetToOriginalPosition();
-        }
-
         if (State == DieState.Selected)
         {
             _hoverProgress = Mathf.Clamp01(_hoverProgress + Time.deltaTime / HoverAnimationTime);
@@ -142,22 +130,24 @@ public class RealDie : MonoBehaviour
             }
             
             Debug.Log($"Best side: {bestSideIndex} ({bestSideDotProduct})");
+            State = DieState.Still;
         }
     }
     
     private void OnMouseEnter()
     {
-        MouseEnter?.Invoke();
+        if(State == DieState.Idle || State == DieState.Selected)
+            MouseEnter?.Invoke();
     }
 
     private void OnMouseExit()
     {
-        MouseExit?.Invoke();
+        if(State == DieState.Idle || State == DieState.Selected)
+            MouseExit?.Invoke();
     }
 
     public void Select()
     {
-        _hoverStartPosition = transform.position;
         _hoverTargetPosition = _startPosition + new Vector3(0, 1f, 0);
         State = DieState.Selected;
     }

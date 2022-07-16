@@ -29,10 +29,14 @@ public class GameManager : MonoBehaviour
         StartNewEncounter(RollEncounter());
         
         Dragger.DragCompleted += DraggerOnDragCompleted;
+        
+        
         AttackDie.MouseEnter += () => { SelectDie(AttackDie); };
         AttackDie.MouseExit += () => { SelectDie(null); };
-        DefenceDie.MouseEnter += () => { SelectDie(DefenceDie); };
-        DefenceDie.MouseExit += () => { SelectDie(null); };
+        //DefenceDie.MouseEnter += () => { SelectDie(DefenceDie); };
+        //DefenceDie.MouseExit += () => { SelectDie(null); };
+        
+        SelectDie(AttackDie);
     }
 
     private void Update()
@@ -40,6 +44,22 @@ public class GameManager : MonoBehaviour
         // Transitions test
         if (Input.GetKeyDown(KeyCode.D)) BookPage.TransitionIn();
         if (Input.GetKeyDown(KeyCode.S)) BookPage.TransitionOut();
+
+        // Die test controls
+        if (_selectedDie != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var direction = new Vector3(Random.Range(0.2f, 1f), .1f, Random.Range(0.2f, 1f));
+                _selectedDie.ResetToOriginalPosition();
+                _selectedDie.Throw(direction * 100);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _selectedDie.ResetToOriginalPosition();
+            }
+        }
     }
 
     private void SelectDie(RealDie die)
@@ -47,13 +67,8 @@ public class GameManager : MonoBehaviour
         if(Dragger.IsDragging)
             return;
 
-        if (die != null && die.State != RealDie.DieState.Idle)
-            return;
-
         if (_selectedDie != null)
-        {
             _selectedDie.Unselect();
-        }
 
         if (die != null)
         {
