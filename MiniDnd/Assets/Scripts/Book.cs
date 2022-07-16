@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class Book : MonoBehaviour
 {
+    [SerializeField] private float PageTransitionTime = 0.5f;
     [SerializeField] private SoundAsset PageFlipSound;
-    [SerializeField] private BookPage Page;
+    [SerializeField] private BookPage RightPage;
+    [SerializeField] private BookPage LeftPage;
     [SerializeField] private Animator Animator;
     
     private static readonly int FlipPageTriggerName = Animator.StringToHash("FlipPage");
@@ -21,9 +23,11 @@ public class Book : MonoBehaviour
     IEnumerator TransitionRoutine(Action contentUpdateCallback)
     {
         yield return new WaitForSeconds(0.8f);
-        Page.TransitionOut();
+        RightPage.TransitionOut(PageTransitionTime);
+        LeftPage.TransitionOut(PageTransitionTime);
         yield return new WaitForSeconds(1.0f);
         contentUpdateCallback?.Invoke();
-        Page.TransitionIn();
+        RightPage.TransitionIn(PageTransitionTime);
+        LeftPage.TransitionIn(PageTransitionTime);
     }
 }

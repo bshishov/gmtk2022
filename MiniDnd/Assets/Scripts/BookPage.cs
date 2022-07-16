@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class BookPage : MonoBehaviour
 {
-    [SerializeField] private float TransitionTime = 1f;
     private Renderer _renderer;
     private static readonly int Threshold = Shader.PropertyToID("_Threshold");
     private Coroutine _coroutine;
@@ -14,18 +13,14 @@ public class BookPage : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    public void TransitionIn() => TransitionIn(TransitionTime);
-
-    private void TransitionIn(float transitionTime)
+    public void TransitionIn(float transitionTime)
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
         _coroutine = StartCoroutine(PageDissolveAnimation(0, 1, transitionTime));
     }
-    
-    public void TransitionOut() => TransitionOut(TransitionTime);
 
-    private void TransitionOut(float transitionTime)
+    public void TransitionOut(float transitionTime)
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
