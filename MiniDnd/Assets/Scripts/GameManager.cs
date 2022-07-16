@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
     {
         if (_selectedDie != null)
         {
+            _selectedDie.Unselect();
             _selectedDie.Throw(new Vector3(direction.x, 0, direction.y) * 1f);
         }
     }

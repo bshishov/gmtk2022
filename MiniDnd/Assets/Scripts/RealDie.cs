@@ -29,8 +29,13 @@ public class RealDie : MonoBehaviour
     [SerializeField] private SoundAsset CollideSound;
 
     [Header("Hover")] 
-    public float HoverAnimationTime = 0.2f;
+    [SerializeField] private float HoverAnimationTime = 0.2f;
     
+    [Header("FX")]
+    [SerializeField] private GameObject RollSuccessFx;
+    [SerializeField] private GameObject CollisionFx;
+    [SerializeField] private GameObject SelectedFx;
+
     private Rigidbody _body;
     private Vector3 _startPosition;
     private Quaternion _startRotation;
@@ -41,6 +46,7 @@ public class RealDie : MonoBehaviour
     private Vector3 _idlePosition;
     private Vector3 _hoverTargetPosition;
     private float _hoverProgress;
+    private GameObject _selectedFxInstance;
     
     private const float VelocityThreshold = 0.05f;
     private const float AngularVelocityThreshold = 0.01f;
@@ -140,6 +146,8 @@ public class RealDie : MonoBehaviour
             Value = bestSideIndex + 1;
             Debug.Log($"Value: {Value} Best side: {bestSideIndex} ({bestSideDotProduct})");
             ToIdleState();
+            if(RollSuccessFx != null)
+                Instantiate(RollSuccessFx, transform.position, Quaternion.identity);
             RollingFinished?.Invoke();
         }
     }
@@ -158,11 +166,19 @@ public class RealDie : MonoBehaviour
 
     public void Select()
     {
+        if (_selectedFxInstance == null && SelectedFx)
+        {
+            _selectedFxInstance = Instantiate(SelectedFx, transform);
+        }
         State = DieState.Selected;
     }
     
     public void Unselect()
     {
+        if (_selectedFxInstance)
+        {
+            Destroy(_selectedFxInstance);
+        }
         State = DieState.Idle;
     }
 
@@ -181,6 +197,11 @@ public class RealDie : MonoBehaviour
         if (sound != null)
         {
             sound.Volume *= Mathf.Clamp01(other.impulse.magnitude * 0.1f);
+        }
+
+        if (CollisionFx != null)
+        {
+            Instantiate(CollisionFx, transform.position, CollisionFx.transform.localRotation);
         }
     }
 }
