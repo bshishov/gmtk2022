@@ -3,11 +3,9 @@
     Properties
     {
         _Color("Main Color", Color) = (1,1,1,1)
-        _MainTex("Texture", 2D) = "white" {}
+        _MainTex ("Texture", 2D) = "white" {}
         _RampTex("Ramp", 2D) = "white" {}
-        _TintColor("Tint Color", Color) = (0, 0, 0, 0)
     }
-    
     SubShader
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Geometry" }
@@ -16,7 +14,7 @@
         Pass
         {
             Blend SrcAlpha OneMinusSrcAlpha
-
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag            
@@ -40,32 +38,30 @@
             sampler2D _MainTex;
             sampler2D _RampTex;
             float4 _MainTex_ST;
-            fixed4 _Color;
-            fixed4 _LightColor0;
-            fixed4 _TintColor;
+            fixed4 _Color;            
+            fixed4 _LightColor0;            
 
-            v2f vert(appdata v)
+            v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
                 half3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.lightCoeff = dot(worldNormal, _WorldSpaceLightPos0.xyz) * 0.5 + 0.5;
+                o.lightCoeff = dot(worldNormal, _WorldSpaceLightPos0.xyz) * 0.5 + 0.5;                
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target
-            {
+            fixed4 frag (v2f i) : SV_Target
+            {   
                 fixed4 rampValue = tex2D(_RampTex, i.lightCoeff).r;
                 fixed4 col = tex2D(_MainTex, i.uv) * _Color * _LightColor0;
                 col.rgb *= rampValue;
-                
-                return fixed4((1 - _TintColor.a) * col.rgb + _TintColor.a * _TintColor.rgb, col.a);
+                return col;
             }
             ENDCG
         }
     }
-
-        Fallback "Unlit/Texture"
+    
+    Fallback "Unlit/Texture"
 }
