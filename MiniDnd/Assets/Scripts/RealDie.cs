@@ -201,7 +201,8 @@ public class RealDie : MonoBehaviour
 
         if (CollisionFx != null)
         {
-            Instantiate(CollisionFx, transform.position, CollisionFx.transform.localRotation);
+            var collisionFxInstance = Instantiate(CollisionFx, transform.position, CollisionFx.transform.localRotation);
+            Destroy(collisionFxInstance, 2f);
         }
     }
 }
