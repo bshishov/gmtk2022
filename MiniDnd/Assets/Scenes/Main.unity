@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44338703, g: 0.4926616, b: 0.57229424, a: 1}
+  m_IndirectSpecularColor: {r: 0.4383956, g: 0.4864598, b: 0.5667365, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -479,12 +479,12 @@ Light:
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 1
+  m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
-  m_Range: 10
-  m_SpotAngle: 30
+  m_Color: {r: 0.9528302, g: 0.85998076, b: 0.6067551, a: 1}
+  m_Intensity: 10.9
+  m_Range: 17.64253
+  m_SpotAngle: 94.46116
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -539,13 +539,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: -0.0695605, y: 0.69792557, z: -0.64400744, w: 0.305476}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.34222743, y: 0.51330304, z: -0.69045925, w: 0.37771207}
+  m_LocalPosition: {x: -0.06, y: 13.32, z: -3.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 121.08099, y: -91.79001, z: -251.84799}
+  m_LocalEulerAnglesHint: {x: 104.67999, y: -199.556, z: -317.79102}
 --- !u!1 &769570237
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,7 +587,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 769570237}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -864,7 +864,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 43.2
+  field of view: 25
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -889,13 +889,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.66141427, y: -0, z: -0, w: 0.7500208}
-  m_LocalPosition: {x: 2.05, y: 15.31, z: -2.29}
+  m_LocalRotation: {x: 0.5792023, y: -0, z: -0, w: 0.8151839}
+  m_LocalPosition: {x: 3.09, y: 22.91, z: -7.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 82.816, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 70.789, y: 0, z: 0}
 --- !u!1 &1216927366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,8 +1419,8 @@ MonoBehaviour:
   m_text: Graced by your precence, your faithfull servants want to know what behavior
     is favourable in the eyes of their deity.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 09b8ada206d43684b8ec75da18246425, type: 2}
+  m_sharedMaterial: {fileID: 4467435078284154170, guid: 09b8ada206d43684b8ec75da18246425, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2258,3 +2258,60 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 537f9b9f0cf5f4c4c817da0cf6943a81, type: 3}
+--- !u!1001 &6323622711816662167
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.17346406
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9848402
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 199.979
+      objectReference: {fileID: 0}
+    - target: {fileID: 5679981647269697919, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396087755880817056, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
+      propertyPath: m_Name
+      value: Candle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f612951a772ddb949a43a6c801ea89d8, type: 3}
