@@ -56,12 +56,22 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: mat_Left_Page_Canvas
+    second: {fileID: 2100000, guid: d517de50f518a71489d3750daada8607, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: mat_Main_Page
     second: {fileID: 2100000, guid: 1021a0463a11cc243b925bf7a892e752, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: mat_Mane_Page
+    second: {fileID: 2100000, guid: 1021a0463a11cc243b925bf7a892e752, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_Right_Page_Canvas
     second: {fileID: 2100000, guid: 1021a0463a11cc243b925bf7a892e752, type: 2}
   - first:
       type: UnityEngine:Material

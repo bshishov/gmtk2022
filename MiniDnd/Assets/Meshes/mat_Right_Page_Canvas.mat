@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: mat_Main_Page
+  m_Name: mat_Right_Page_Canvas
   m_Shader: {fileID: 4800000, guid: b5ebf25c0116232408374f9808262ffa, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
