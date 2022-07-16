@@ -36,6 +36,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: mat_Book_Main_Page_Paper
+    second: {fileID: 2100000, guid: c9a732d05bfc2254087f661ac0ab5e9f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: mat_Book_Pages
     second: {fileID: 2100000, guid: e38c31c2c8e22b541a60ba9b6ea9c879, type: 2}
   - first:
@@ -48,6 +53,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: mat_Bookmark_02
     second: {fileID: 2100000, guid: 7a445073a556cef4b9b7757491ca4c1d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_Main_Page
+    second: {fileID: 2100000, guid: 1021a0463a11cc243b925bf7a892e752, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
