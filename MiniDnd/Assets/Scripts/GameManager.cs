@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Activities;
 using TMPro;
 using UnityEngine;
 
@@ -7,28 +8,27 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Dragger Dragger;
     [SerializeField] private RealDie AttackDie;
-    [SerializeField] private RealDie DefenceDie;
     [SerializeField] private Book Book;
     [SerializeField] private TextMeshProUGUI PageText;
 
     private Player _player;
-    private List<Encounter> _encounters;
+    private List<Activity> _activities;
     
-    private Encounter _activeEncounter;
+    private Activity _activeActivity;
     private Dice[] _availableDice;
 
     private RealDie _selectedDie;
 
     private void Start()
     {
-        _encounters = Utils.ConstructAllObjectOfType<Encounter>().ToList();
-        foreach (var encounter in _encounters)
+        _activities = Utils.ConstructAllObjectOfType<Activity>().ToList();
+        foreach (var encounter in _activities)
         {
             Debug.Log($"Loaded: {encounter}");
         }
 
         _player = new Player();
-        StartNewEncounter(RollEncounter());
+        StartActivity(_activities.FirstOrDefault(a => a is S1Start));
         
         Dragger.DragCompleted += DraggerOnDragCompleted;
         
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         // Transitions test
         if (Input.GetKeyDown(KeyCode.D)) Book.FlipPage(() =>
         {
-            PageText.text = _activeEncounter.Text(_player);
+            PageText.text = _activeActivity.Text(_player);
         });
 
         // Die test controls
@@ -102,29 +102,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void StartNewEncounter(Encounter encounter)
+    private void StartActivity(Activity activity)
     {
         // Finish last
-        _activeEncounter?.AfterEncounterEnd(_player);
+        _activeActivity?.AfterEnd(_player);
 
         // Start new
-        if(encounter == null)
+        if(activity == null)
             return;
         
-        _activeEncounter = encounter;
-        _availableDice = _activeEncounter.AvailableDice(_player);
-        _player.ShouldStartNewEncounter = false;
-        _activeEncounter.BeforeEncounterStart(_player);
+        Debug.Log($"Starting: {activity.Name}");
 
-        PageText.text = _activeEncounter.Text(_player);
+        _activeActivity = activity;
+        _availableDice = _activeActivity.AvailableDice(_player);
+        _player.ShouldStartNewEncounter = false;
+        _player.NextExpectedActivity = null;
+        _activeActivity.BeforeStart(_player);
+        PageText.text = _activeActivity.Text(_player);
     }
 
-    private Encounter RollEncounter()
+    private Activity RollActivity()
     {
-        var possible = _encounters.Where(e => e.Check(_player)).ToList();
+        var possible = _activities.Where(e => e.CanBeRolled(_player)).ToList();
         if (!possible.Any())
         {
-            Debug.LogWarning("No encounters available");
+            Debug.LogWarning("Failed to roll activity... no activities available");
             return null;
         }
 
@@ -136,13 +138,23 @@ public class GameManager : MonoBehaviour
     private void ApplyRoll(DiceRoll rolledDice)
     {
         Debug.Log($"Rolled dice: {rolledDice}");
-        _activeEncounter.Act(_player, rolledDice);
+        _activeActivity.PlayerRoll(_player, rolledDice);
 
         if (_player.ShouldStartNewEncounter)
         {
             Book.FlipPage(() =>
             {
-                StartNewEncounter(RollEncounter());
+                Activity nextActivity;
+                if (_player.NextExpectedActivity != null)
+                {
+                    nextActivity = _activities.FirstOrDefault(a => a.Name.Equals(_player.NextExpectedActivity));
+                }
+                else
+                {
+                    nextActivity = RollActivity();
+                }
+                
+                StartActivity(nextActivity);
             });
         }
     }
@@ -152,13 +164,13 @@ public class GameManager : MonoBehaviour
         GUILayout.BeginArea(new Rect(10, 10, 300, 600));
         GUILayout.BeginVertical();
 
-        if (_activeEncounter != null)
+        if (_activeActivity != null)
         {
             GUILayout.Label("Current encounter:");
-            GUILayout.Label(_activeEncounter.Name);
+            GUILayout.Label(_activeActivity.Name);
             GUILayout.Space(20);
             GUILayout.Label("Text:");
-            GUILayout.Label(_activeEncounter.Text(_player));
+            GUILayout.Label(_activeActivity.Text(_player));
             
             GUILayout.Space(20);
             foreach (var die in _availableDice)

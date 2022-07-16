@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using TSUtils.Sounds;
 using UnityEngine;
 
@@ -83,7 +85,6 @@ public class RealDie : MonoBehaviour
 
     public void Throw(Vector3 impulse)
     {
-        State = DieState.Rolling;
         _body.isKinematic = false;
         
         Debug.Log($"Throwing cube {impulse}");
@@ -92,6 +93,19 @@ public class RealDie : MonoBehaviour
         var sound = SoundManager.Instance.Play(ThrowSound);
         if (sound != null)
             sound.Volume *= Mathf.Clamp01(impulse.magnitude * 0.1f);
+
+        StartCoroutine(Delayed(() =>
+        {
+            State = DieState.Rolling;
+        }, 0.1f));
+    }
+
+    private IEnumerator Delayed(Action action, float delay)
+    {
+        if (action == null)
+            yield break;
+        yield return new WaitForSeconds(delay);
+        action.Invoke();
     }
     
     public void ResetToOriginalPosition()
@@ -122,33 +136,36 @@ public class RealDie : MonoBehaviour
 
     public void FixedUpdate()
     {
-        var velocity = _body.velocity;
-        var angularVelocity = _body.angularVelocity;
-
-        var wasStanding = _isStandingStill;
-        _isStandingStill = velocity.magnitude < VelocityThreshold && angularVelocity.magnitude < AngularVelocityThreshold;
-        if (!wasStanding && _isStandingStill)
+        if (State == DieState.Rolling)
         {
-            var localUp = transform.InverseTransformDirection(Vector3.up);
-
-            var bestSideIndex = -1;
-            var bestSideDotProduct = -1f;
-            for (var i = 0; i < _sides.Length; i++)
+            var velocity = _body.velocity;
+            var angularVelocity = _body.angularVelocity;
+            var wasStanding = _isStandingStill;
+            _isStandingStill = velocity.magnitude < VelocityThreshold &&
+                               angularVelocity.magnitude < AngularVelocityThreshold;
+            if (!wasStanding && _isStandingStill)
             {
-                var dot = Vector3.Dot(localUp, _sides[i]);
-                if (dot > bestSideDotProduct)
+                var localUp = transform.InverseTransformDirection(Vector3.up);
+
+                var bestSideIndex = -1;
+                var bestSideDotProduct = -1f;
+                for (var i = 0; i < _sides.Length; i++)
                 {
-                    bestSideDotProduct = dot;
-                    bestSideIndex = i;
+                    var dot = Vector3.Dot(localUp, _sides[i]);
+                    if (dot > bestSideDotProduct)
+                    {
+                        bestSideDotProduct = dot;
+                        bestSideIndex = i;
+                    }
                 }
+
+                Value = bestSideIndex + 1;
+                Debug.Log($"Value: {Value} Best side: {bestSideIndex} ({bestSideDotProduct})");
+                ToIdleState();
+                if (RollSuccessFx != null)
+                    Instantiate(RollSuccessFx, transform.position, Quaternion.identity);
+                RollingFinished?.Invoke();
             }
-            
-            Value = bestSideIndex + 1;
-            Debug.Log($"Value: {Value} Best side: {bestSideIndex} ({bestSideDotProduct})");
-            ToIdleState();
-            if(RollSuccessFx != null)
-                Instantiate(RollSuccessFx, transform.position, Quaternion.identity);
-            RollingFinished?.Invoke();
         }
     }
     
