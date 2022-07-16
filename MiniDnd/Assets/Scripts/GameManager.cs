@@ -31,8 +31,7 @@ public class GameManager : MonoBehaviour
         StartActivity(_activities.FirstOrDefault(a => a is S1Start));
         
         Dragger.DragCompleted += DraggerOnDragCompleted;
-        
-        
+
         AttackDie.MouseEnter += () => { SelectDie(AttackDie); };
         AttackDie.MouseExit += () => { SelectDie(null); };
         AttackDie.RollingFinished += () =>
@@ -47,7 +46,7 @@ public class GameManager : MonoBehaviour
         //DefenceDie.MouseEnter += () => { SelectDie(DefenceDie); };
         //DefenceDie.MouseExit += () => { SelectDie(null); };
         
-        SelectDie(AttackDie);
+        //SelectDie(AttackDie);
     }
 
     private void Update()
