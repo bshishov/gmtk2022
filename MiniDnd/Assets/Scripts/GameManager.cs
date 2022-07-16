@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RealDie AttackDie;
     [SerializeField] private RealDie DefenceDie;
     [SerializeField] private Book Book;
+    [SerializeField] private TextMeshProUGUI PageText;
 
     private Player _player;
     private List<Encounter> _encounters;
@@ -33,6 +35,15 @@ public class GameManager : MonoBehaviour
         
         AttackDie.MouseEnter += () => { SelectDie(AttackDie); };
         AttackDie.MouseExit += () => { SelectDie(null); };
+        AttackDie.RollingFinished += () =>
+        {
+            ApplyRoll(new DiceRoll
+            {
+                Dice = Dice.Attack,
+                Value = AttackDie.Value
+            });
+        };
+        
         //DefenceDie.MouseEnter += () => { SelectDie(DefenceDie); };
         //DefenceDie.MouseExit += () => { SelectDie(null); };
         
@@ -42,7 +53,10 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // Transitions test
-        if (Input.GetKeyDown(KeyCode.D)) Book.FlipPage();
+        if (Input.GetKeyDown(KeyCode.D)) Book.FlipPage(() =>
+        {
+            PageText.text = _activeEncounter.Text(_player);
+        });
 
         // Die test controls
         if (_selectedDie != null)
@@ -100,6 +114,8 @@ public class GameManager : MonoBehaviour
         _availableDice = _activeEncounter.AvailableDice(_player);
         _player.ShouldStartNewEncounter = false;
         _activeEncounter.BeforeEncounterStart(_player);
+
+        PageText.text = _activeEncounter.Text(_player);
     }
 
     private Encounter RollEncounter()
@@ -116,14 +132,18 @@ public class GameManager : MonoBehaviour
         return rolled;
     }
 
-    private void Roll(Dice dice)
+    private void ApplyRoll(DiceRoll rolledDice)
     {
-        var rolledDice = DiceRoll.Random(dice);
         Debug.Log($"Rolled dice: {rolledDice}");
         _activeEncounter.Act(_player, rolledDice);
 
         if (_player.ShouldStartNewEncounter)
-            StartNewEncounter(RollEncounter());
+        {
+            Book.FlipPage(() =>
+            {
+                StartNewEncounter(RollEncounter());
+            });
+        }
     }
 
     private void OnGUI()
@@ -149,7 +169,7 @@ public class GameManager : MonoBehaviour
         
         foreach (var die in _availableDice)
         {
-            if (GUILayout.Button(die.ToString())) Roll(die);
+            if (GUILayout.Button(die.ToString())) ApplyRoll(DiceRoll.Random(die));
         }
 
         GUILayout.EndVertical();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TSUtils.Sounds;
 using UnityEngine;
@@ -10,18 +11,19 @@ public class Book : MonoBehaviour
     
     private static readonly int FlipPageTriggerName = Animator.StringToHash("FlipPage");
     
-    public void FlipPage()
+    public void FlipPage(Action contentUpdateCallback)
     {
         Animator.SetTrigger(FlipPageTriggerName);
-        StartCoroutine(TransitionRoutine());
+        StartCoroutine(TransitionRoutine(contentUpdateCallback));
         SoundManager.Instance.Play(PageFlipSound);
     }
 
-    IEnumerator TransitionRoutine()
+    IEnumerator TransitionRoutine(Action contentUpdateCallback)
     {
         yield return new WaitForSeconds(0.8f);
         Page.TransitionOut();
         yield return new WaitForSeconds(1.0f);
+        contentUpdateCallback?.Invoke();
         Page.TransitionIn();
     }
 }

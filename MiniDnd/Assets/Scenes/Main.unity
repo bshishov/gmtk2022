@@ -284,7 +284,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!65 &262713071
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1602,6 +1602,7 @@ MonoBehaviour:
   AttackDie: {fileID: 262713075}
   DefenceDie: {fileID: 1863464613}
   Book: {fileID: 239639151}
+  PageText: {fileID: 1763783210}
 --- !u!4 &1817067956
 Transform:
   m_ObjectHideFlags: 0

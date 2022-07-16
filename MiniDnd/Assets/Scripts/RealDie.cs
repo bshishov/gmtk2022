@@ -1,7 +1,6 @@
 using System;
 using TSUtils.Sounds;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 public class RealDie : MonoBehaviour
@@ -12,13 +11,13 @@ public class RealDie : MonoBehaviour
         Idle,
         Selected,
         Rolling,
-        Still
     }
-    
     public DieState State { get; private set; }
+    public int Value { get; private set; }
     
     public event Action MouseEnter;  
-    public event Action MouseExit;  
+    public event Action MouseExit;
+    public event Action RollingFinished;
 
     [Header("Mechanic")]
     public float ThrowForce = 1f;
@@ -39,11 +38,12 @@ public class RealDie : MonoBehaviour
     private float _lastSoundPlayedTime;
     
     // HoverAnimation
+    private Vector3 _idlePosition;
     private Vector3 _hoverTargetPosition;
     private float _hoverProgress;
-
+    
     private const float VelocityThreshold = 0.05f;
-    private const float AngularVelocityThreshold = 0.05f;
+    private const float AngularVelocityThreshold = 0.01f;
 
     private readonly Vector3[] _sides = {
         Vector3.up,
@@ -53,7 +53,7 @@ public class RealDie : MonoBehaviour
         Vector3.left,
         Vector3.right,
     };
-
+    
     private void Start()
     {
         _body = GetComponent<Rigidbody>();
@@ -63,9 +63,16 @@ public class RealDie : MonoBehaviour
         _startRotation = t.rotation;
 
         Physics.gravity = new Vector3(0, -20, 0);
+        ToIdleState();
+    }
 
-        _body.isKinematic = true;
+    private void ToIdleState()
+    {
+        _idlePosition = transform.position;
+        _hoverTargetPosition = _idlePosition + new Vector3(0, 1f, 0);
+        _hoverProgress = 0f;
         State = DieState.Idle;
+        _body.isKinematic = true;
     }
 
     public void Throw(Vector3 impulse)
@@ -88,7 +95,8 @@ public class RealDie : MonoBehaviour
         t.rotation = _startRotation;
         _body.velocity = Vector3.zero;
         _body.angularVelocity = Vector3.zero;
-        State = DieState.Idle;
+        
+        ToIdleState();
     }
 
     public void Update()
@@ -96,13 +104,13 @@ public class RealDie : MonoBehaviour
         if (State == DieState.Selected)
         {
             _hoverProgress = Mathf.Clamp01(_hoverProgress + Time.deltaTime / HoverAnimationTime);
-            transform.position = Vector3.Lerp(_startPosition, _hoverTargetPosition, _hoverProgress);
+            transform.position = Vector3.Lerp(_idlePosition, _hoverTargetPosition, _hoverProgress);
         }
 
         if (State == DieState.Idle)
         {
             _hoverProgress = Mathf.Clamp01(_hoverProgress - Time.deltaTime / HoverAnimationTime);
-            transform.position = Vector3.Lerp(_startPosition, _hoverTargetPosition, _hoverProgress);
+            transform.position = Vector3.Lerp(_idlePosition, _hoverTargetPosition, _hoverProgress);
         }
     }
 
@@ -129,8 +137,10 @@ public class RealDie : MonoBehaviour
                 }
             }
             
-            Debug.Log($"Best side: {bestSideIndex} ({bestSideDotProduct})");
-            State = DieState.Still;
+            Value = bestSideIndex + 1;
+            Debug.Log($"Value: {Value} Best side: {bestSideIndex} ({bestSideDotProduct})");
+            ToIdleState();
+            RollingFinished?.Invoke();
         }
     }
     
@@ -148,7 +158,6 @@ public class RealDie : MonoBehaviour
 
     public void Select()
     {
-        _hoverTargetPosition = _startPosition + new Vector3(0, 1f, 0);
         State = DieState.Selected;
     }
     
