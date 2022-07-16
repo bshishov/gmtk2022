@@ -9,6 +9,9 @@ ModelImporter:
   - first:
       74: -4932489583690374360
     second: "arm_Book|\u0421\u043E\u043B\u043D\u0446\u0435Action"
+  - first:
+      74: 6675261467427633371
+    second: arm_Book|anim_idle
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -83,6 +86,35 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: arm_Book|anim_idle
+      takeName: arm_Book|anim_Pageturn
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 0
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

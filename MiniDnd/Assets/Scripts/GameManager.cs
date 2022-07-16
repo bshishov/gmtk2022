@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Dragger Dragger;
     [SerializeField] private RealDie AttackDie;
     [SerializeField] private RealDie DefenceDie;
-    [SerializeField] private BookPage BookPage;
+    [SerializeField] private Book Book;
 
     private Player _player;
     private List<Encounter> _encounters;
@@ -42,8 +42,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // Transitions test
-        if (Input.GetKeyDown(KeyCode.D)) BookPage.TransitionIn();
-        if (Input.GetKeyDown(KeyCode.S)) BookPage.TransitionOut();
+        if (Input.GetKeyDown(KeyCode.D)) Book.FlipPage();
 
         // Die test controls
         if (_selectedDie != null)
