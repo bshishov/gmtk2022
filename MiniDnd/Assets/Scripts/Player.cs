@@ -2,6 +2,20 @@ using System;
 using System.Collections.Generic;
 using Konklav;
 
+
+public class Interaction
+{
+    public readonly Action Action;
+    public readonly float Delay;
+
+    public Interaction(Action action, float delay)
+    {
+        Action = action;
+        Delay = delay;
+    }
+}
+
+
 public class Player : IContext
 {
     public string Location = "start";
@@ -14,6 +28,7 @@ public class Player : IContext
     public string CurrentActivity;
     private readonly Action<string> _showTextCallback;
     private readonly Action<string> _showImageCallback;
+    public readonly List<Interaction> InteractionQueue = new List<Interaction>();
 
     public Player(Action<string> showTextCallback, Action<string> showImageCallback)
     {
@@ -23,6 +38,7 @@ public class Player : IContext
 
     public void EndEncounter()
     {
+        
         ShouldStartNewEncounter = true;
     }
 
@@ -51,9 +67,23 @@ public class Player : IContext
 
     public int LastDiceRollValue => LastDiceRoll.Value;
 
+    public void Schedule(Action action, float delay = 0f)
+    {
+        InteractionQueue.Add(new Interaction(action, delay));    
+    }
+
+    public void ScheduleWait(float time)
+    {
+        InteractionQueue.Add(new Interaction(() => UnityEngine.Debug.Log($"[{CurrentActivity}]Waiting for {time}"), time));
+    }
+
     public void ShowText(string text)
     {
-        _showTextCallback?.Invoke(text);
+        if (_showTextCallback != null)
+        {
+            Schedule(() => _showTextCallback(text));
+            ScheduleWait(2f);
+        }
     }
 
     public void Debug(string message)
@@ -63,7 +93,10 @@ public class Player : IContext
 
     public void ShowImage(string imageName)
     {
-        _showImageCallback?.Invoke(imageName);
+        if (_showImageCallback != null)
+        {
+            Schedule(() => _showImageCallback.Invoke(imageName));
+        }
     }
 
     public void SetTag(string tag)

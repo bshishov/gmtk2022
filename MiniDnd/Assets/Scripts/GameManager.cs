@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Konklav;
@@ -32,11 +32,11 @@ public class GameManager : MonoBehaviour
         AttackDie.MouseExit += () => { SelectDie(null); };
         AttackDie.RollingFinished += () =>
         {
-            ApplyRoll(new DiceRoll
+            StartCoroutine(ApplyRoll(new DiceRoll
             {
                 Dice = Dice.Attack,
                 Value = AttackDie.Value
-            });
+            }));
         };
 
         BeginStory();
@@ -215,11 +215,25 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Rolled: {rolled}");
         return rolled;
     }
-
-    private void ApplyRoll(DiceRoll rolledDice)
+    
+    private IEnumerator ApplyRoll(DiceRoll rolledDice)
     {
         _player.Debug($"Rolled dice: {rolledDice}");
         _activeActivity.PlayerRoll(_player, rolledDice);
+
+        // Execute interaction
+        for (var i = 0; i < _player.InteractionQueue.Count; i++)
+        {
+            var interaction = _player.InteractionQueue[i];
+            
+            // Wait delay
+            if (interaction.Delay > 0f)
+                yield return new WaitForSeconds(interaction.Delay);
+            
+            // Do interaction
+            interaction.Action?.Invoke();
+        }
+        _player.InteractionQueue.Clear();
 
         if (_player.ShouldStartNewEncounter)
         {
