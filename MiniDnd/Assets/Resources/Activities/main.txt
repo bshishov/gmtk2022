@@ -1,0 +1,17 @@
+# start  
+/rollable true
+/weight 100
+
+- Embark on adventure?
+
+? 1-5
+    - Yes
+    /goto greetings
+
+? 6
+    - No
+    /end         
+
+
+# greetings 
+- Привет

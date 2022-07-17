@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Activities;
+using Konklav;
 using TMPro;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"Loaded: {encounter}");
         }
+        LoadActivities();
 
         _player = new Player();
         StartActivity(_activities.FirstOrDefault(a => a is S1Start));
@@ -47,6 +49,21 @@ public class GameManager : MonoBehaviour
         //DefenceDie.MouseExit += () => { SelectDie(null); };
         
         //SelectDie(AttackDie);
+    }
+
+    private void LoadActivities()
+    {
+        var activitySourceFiles = Resources.LoadAll<TextAsset>("Activities");
+        foreach (var sourceFile in activitySourceFiles)
+        {
+            var parser = new Parser(sourceFile.text + "\n");
+            var activities = parser.ReadActivities();
+
+            foreach (var activityAst in activities)
+            {
+                Debug.Log($"Loaded {activityAst.Name}");
+            }
+        }
     }
 
     private void Update()

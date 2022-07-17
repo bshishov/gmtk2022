@@ -5,6 +5,7 @@ public class Player
 
     public bool ShouldStartNewEncounter = true;
     public string NextExpectedActivity;
+    public DiceRoll LastDiceRoll;
 
     public void EndEncounter()
     {
@@ -16,5 +17,16 @@ public class Player
     {
         ShouldStartNewEncounter = true;
         NextExpectedActivity = typeof(T).Name;
+    }
+    
+    public void Goto(string activityName)
+    {
+        ShouldStartNewEncounter = true;
+        NextExpectedActivity = activityName;
+    }
+
+    public void ShowText(string text)
+    {
+        throw new System.NotImplementedException();
     }
 }
