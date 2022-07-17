@@ -226,6 +226,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator ApplyRoll(DiceRoll rolledDice)
     {
         _animationIsInProgress = true;
+        if(_selectedDie != null)
+            _selectedDie.StopAllParticleSystems();
+        
         _player.Debug($"Rolled dice: {rolledDice}");
         _activeActivity.PlayerRoll(_player, rolledDice);
 
@@ -266,6 +269,9 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         _animationIsInProgress = false;
+        
+        if(_selectedDie != null)
+            _selectedDie.StartAllParticleSystems();
     }
 
     private bool CanRoll()

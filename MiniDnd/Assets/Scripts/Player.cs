@@ -19,8 +19,6 @@ public class Interaction
 
 public class Player : IContext
 {
-    public string Location = "start";
-    public int Power = 6;
     public bool ShouldStartNewEncounter = true;
     public string NextExpectedActivity;
     public DiceRoll LastDiceRoll;

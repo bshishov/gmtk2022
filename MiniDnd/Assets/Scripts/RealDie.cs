@@ -62,7 +62,9 @@ public class RealDie : MonoBehaviour
         Vector3.right,
         Vector3.down,
     };
-    
+
+    private ParticleSystem[] _particleSystems;
+
     private void Start()
     {
         _body = GetComponent<Rigidbody>();
@@ -73,6 +75,18 @@ public class RealDie : MonoBehaviour
 
         Physics.gravity = new Vector3(0, -20, 0);
         ToIdleState();
+        
+        _particleSystems = GetComponentsInChildren<ParticleSystem>();
+    }
+
+    public void StopAllParticleSystems()
+    {
+        foreach (var system in _particleSystems) system.Stop();
+    }
+    
+    public void StartAllParticleSystems()
+    {
+        foreach (var system in _particleSystems) system.Play();
     }
 
     private void ToIdleState()
