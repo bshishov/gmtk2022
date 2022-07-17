@@ -30,6 +30,7 @@ public class RealDie : MonoBehaviour
     [SerializeField] private SoundAsset ThrowSound; 
     [SerializeField] private SoundAsset CollideSound;
     [SerializeField] private SoundAsset ThrowCompletedSound;
+    [SerializeField] private SoundAsset SelectedSound;
 
     [Header("Hover")] 
     [SerializeField] private float HoverAnimationTime = 0.2f;
@@ -44,6 +45,7 @@ public class RealDie : MonoBehaviour
     private Quaternion _startRotation;
     private bool _isStandingStill;
     private float _lastSoundPlayedTime;
+    private SoundManager.SoundHandler _selectedSound;
     
     // HoverAnimation
     private Vector3 _idlePosition;
@@ -64,6 +66,7 @@ public class RealDie : MonoBehaviour
     };
 
     private ParticleSystem[] _particleSystems;
+    private Quaternion _idleRotation;
 
     private void Start()
     {
@@ -92,6 +95,7 @@ public class RealDie : MonoBehaviour
     private void ToIdleState()
     {
         _idlePosition = transform.position;
+        _idleRotation = transform.rotation;
         _hoverTargetPosition = _idlePosition + new Vector3(0, 1f, 0);
         _hoverProgress = 0f;
         State = DieState.Idle;
@@ -142,12 +146,14 @@ public class RealDie : MonoBehaviour
         {
             _hoverProgress = Mathf.Clamp01(_hoverProgress + Time.deltaTime / HoverAnimationTime);
             transform.position = Vector3.Lerp(_idlePosition, _hoverTargetPosition, _hoverProgress);
+            transform.Rotate(200f * Time.deltaTime, 200f * Time.deltaTime, 200f * Time.deltaTime);
         }
 
         if (State == DieState.Idle)
         {
             _hoverProgress = Mathf.Clamp01(_hoverProgress - Time.deltaTime / HoverAnimationTime);
             transform.position = Vector3.Lerp(_idlePosition, _hoverTargetPosition, _hoverProgress);
+            transform.rotation = _idleRotation;
         }
     }
 
@@ -206,6 +212,12 @@ public class RealDie : MonoBehaviour
             _selectedFxInstance = Instantiate(SelectedFx, transform);
         }
         State = DieState.Selected;
+
+
+        _selectedSound?.Stop();
+
+        _selectedSound = SoundManager.Instance.Play(SelectedSound);
+        _selectedSound.IsLooped = true;
     }
     
     public void Unselect()
@@ -214,6 +226,8 @@ public class RealDie : MonoBehaviour
         {
             Destroy(_selectedFxInstance);
         }
+
+        _selectedSound?.Stop();
         State = DieState.Idle;
     }
 

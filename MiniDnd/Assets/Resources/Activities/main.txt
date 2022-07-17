@@ -8,8 +8,9 @@ if 1-5
 end
 
 if 6
-    - Nope
-    /goto start_again
+    - Nope    
+    /quit
+    /goto start_again    
     // Тут выходим из игры (todo!)
 end
 

@@ -300,6 +300,18 @@ namespace TSUtils.Sounds
                 if (Source != null)
                     Source.Stop();
             }
+            
+            public void Pause()
+            {
+                if (Source != null)
+                    Source.Pause();
+            }
+
+            public void UnPause()
+            {
+                if (Source != null)
+                    Source.UnPause();
+            }
 
             public void AttachToObject(Transform transform1,
                 float spatialBlend = 0.7f,
