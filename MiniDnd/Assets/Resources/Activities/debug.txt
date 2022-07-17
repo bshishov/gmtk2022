@@ -2,6 +2,10 @@
 
     - 1) debug_image
     - 2) debug_tag
+    - 3) ...
+    - 4) ...
+    - 5) ...
+    - 6) ...
 
     if 1
         /goto debug_image
@@ -13,6 +17,8 @@
 
 
 # debug_image
+    /rollable tagged debug-image
+    /weight 10000
 
     - Testing images
 
@@ -28,11 +34,11 @@
 # debug_tag
 
     - Testing tags
-
+    
     if 1-3
-        tag kek13
+        /tag kek
     end
-
-    if 4-6 and tagged kek13
+    
+    if 4-6
         /goto debug
     end

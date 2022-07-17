@@ -20,7 +20,7 @@ namespace Konklav
         private void PrependIndent()
         {
             for (var i = 0; i < _indent; i++)
-                _sb.Append("\t");
+                _sb.Append("    ");
         }
 
         private void Write(string text)
@@ -32,24 +32,37 @@ namespace Konklav
         {
             PrependIndent();
             Write(text);
-            Write("(");
-            Write("\n");
+            Write(" {\n");
             _indent++;
         }
 
-        public void Node(string text)
+        public void Node(string text, string arg = null)
         {
             PrependIndent();
             Write(text);
+
+            if (!string.IsNullOrEmpty(arg))
+            {
+                Write(" : ");
+                Write(arg);
+            }
+
             Write("\n");
         }
 
-        public void End()
+        public void EndNode()
         {
             _indent--;
+            PrependIndent();
+            Write("}\n");
         }
 
         public override string ToString() => _sb.ToString();
+    }
+
+    public interface IAst
+    {
+        void FormatAst(AstFormatter formatter);
     }
     
     public interface IContext
@@ -66,7 +79,7 @@ namespace Konklav
     }
 
 
-    public interface IBoolExpression
+    public interface IBoolExpression : IAst
     {
         bool Evaluate(IContext player);
     }
@@ -81,6 +94,13 @@ namespace Konklav
         }
 
         public bool Evaluate(IContext player) => Expressions.All(e => e.Evaluate(player));
+        
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("And");
+            foreach (var expression in Expressions) expression.FormatAst(formatter);
+            formatter.EndNode();
+        }
     }
 
     public readonly struct OrExpression : IBoolExpression
@@ -90,16 +110,27 @@ namespace Konklav
         public OrExpression(params IBoolExpression[] expressions) => Expressions = expressions;
 
         public bool Evaluate(IContext player) => Expressions.Any(e => e.Evaluate(player));
+        
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("Or");
+            foreach (var expression in Expressions) expression.FormatAst(formatter);
+            formatter.EndNode();
+        }
     }
 
     public struct LiteralTrueExpression : IBoolExpression
     {
         public bool Evaluate(IContext player) => true; 
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("True");
     }
 
     public struct LiteralFalseExpression : IBoolExpression
     {
         public bool Evaluate(IContext player) => true; 
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("False");
     }
 
     public readonly struct ExactDiceResultExpression : IBoolExpression
@@ -112,6 +143,8 @@ namespace Konklav
         }
 
         public bool Evaluate(IContext player) => player.LastDiceRollValue == Value;
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("ExactDice", Value.ToString());
     }
 
     public readonly struct RangeDiceResultExpression : IBoolExpression
@@ -126,6 +159,8 @@ namespace Konklav
         }
 
         public bool Evaluate(IContext player) => player.LastDiceRollValue >= _rangeFrom && player.LastDiceRollValue <= _rangeTo;
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("RangeDice", $"{_rangeFrom}-{_rangeTo}");
     }
 
     public readonly struct VisitedExpression : IBoolExpression
@@ -138,6 +173,8 @@ namespace Konklav
         }
         
         public bool Evaluate(IContext player) => player.Visited(ActivityName);
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("Visited", ActivityName);
     }
 
     public class HasTagExpression : IBoolExpression
@@ -153,9 +190,11 @@ namespace Konklav
         {
             return player.HasTag(Tag);
         }
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("HasTag", Tag);
     }
 
-    public interface INumberExpression
+    public interface INumberExpression : IAst
     {
         float EvaluateAsFloat(IContext player);
     }
@@ -170,13 +209,13 @@ namespace Konklav
         }
 
         public float EvaluateAsFloat(IContext player) => _value;
+        
+        public void FormatAst(AstFormatter formatter) => formatter.Node("Float", _value.ToString(CultureInfo.InvariantCulture));
     }
 
-    public interface IAction
+    public interface IAction : IAst
     {
         void Execute(IContext player);
-
-        //void FormatAst(AstFormatter formatter);
     }
 
     public class TextAction : IAction
@@ -192,6 +231,11 @@ namespace Konklav
         {
             player.Debug($"Text: {Text}");
             player.ShowText(Text);
+        }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("Text", Text);
         }
     }
 
@@ -209,6 +253,11 @@ namespace Konklav
             player.Debug($"/goto {_activityName}");
             player.Goto(_activityName);
         }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("Goto", _activityName);
+        }
     }
     
     public class TagAction : IAction
@@ -225,6 +274,11 @@ namespace Konklav
             player.Debug($"/tag {TagName}");
             player.SetTag(TagName);
         }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("Tag", TagName);
+        }
     }
     
     public class DebugAction : IAction
@@ -237,6 +291,10 @@ namespace Konklav
         }
 
         public void Execute(IContext player) => player.Debug(_string);
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("Debug", _string);
+        }
     }
     
     public class EndAction : IAction
@@ -245,6 +303,11 @@ namespace Konklav
         {
             player.Debug($"/end");
             player.End();
+        }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("End");
         }
     }
 
@@ -258,6 +321,14 @@ namespace Konklav
         public void Execute(IContext player)
         {
             foreach (var action in Actions) action.Execute(player);
+        }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("Composite");
+            foreach (var action in Actions) 
+                action.FormatAst(formatter);
+            formatter.EndNode();
         }
     }
 
@@ -279,6 +350,18 @@ namespace Konklav
                 _action.Execute(player);
             }
         }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("ConditionalAction");
+            formatter.BeginNode("Condition");
+            _condition.FormatAst(formatter);
+            formatter.EndNode();
+            formatter.BeginNode("Action");
+            _action.FormatAst(formatter);
+            formatter.EndNode();
+            formatter.EndNode();
+        }
     }
 
     public class RollableAttribAction : IAction
@@ -291,6 +374,13 @@ namespace Konklav
         }
     
         public void Execute(IContext player) { }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("RollableAttrib");
+            Condition.FormatAst(formatter);
+            formatter.EndNode();
+        }
     }
 
     public class WeighAttribAction : IAction
@@ -303,6 +393,13 @@ namespace Konklav
         }
     
         public void Execute(IContext player) { }
+        
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("WeighAttribAction");
+            Expression.FormatAst(formatter);
+            formatter.EndNode();
+        }
     }
 
     public class ImageAction : IAction
@@ -319,21 +416,36 @@ namespace Konklav
             player.Debug($"Image: {ImageName}");
             player.ShowImage(ImageName);
         }
+        
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.Node("Image", ImageName);
+        }
     }
 
-    public class ActivityAst
+    public class ActivityAst : IAst
     {
         public string Name;
         public CompositeAction CompositeAction;
+        
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("Activity");
+            formatter.Node("Name", Name);
+            CompositeAction.FormatAst(formatter);
+            formatter.EndNode();
+        }
     }
 
     public class ParserError : Exception
     {
         public readonly int Position;
+        private readonly string _source;
 
-        public ParserError(int position, string message)
+        public ParserError(string source, int position, string message)
             : base(message)
         {
+            _source = source;
             Position = position;
         }
     }
@@ -355,7 +467,15 @@ namespace Konklav
 
         private ParserError Error(string message)
         {
-            return new ParserError(_position, message);
+            var line = 1;
+            var to = Math.Min(_position, _source.Length);
+            for (var i = 0; i < to; i++)
+            {
+                if (_source[i] == '\n')
+                    line++;
+            }
+            
+            return new ParserError(_source, _position, $"Error at line {line}: {message}");
         }
 
         private char TakeChar()
@@ -673,12 +793,11 @@ namespace Konklav
                 var backtrackTo = _position;
                 try
                 {
-                    ReadSingleLineBreak();
-                    ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
-                    ReadExact('-');
+                    //ReadSingleLineBreak();
                     ReadCharsMaybe(AnyWhitespace, new StringBuilder());
+                    ReadExact('-');
+                    ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
                     var line = ReadNonEmptyStringUntilLineBreak();
-                    ReadSingleLineBreak();
                     result.Append("\n");
                     result.Append(line);
                 }
@@ -727,8 +846,9 @@ namespace Konklav
                 var backtrackTo = _position;
                 try
                 {
-                    ReadLineBreaks();
-                    ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
+                    //ReadLineBreaks();
+                    //ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
+                    ReadCharsMaybe(AnyWhitespace, new StringBuilder());
                     actions.Add(ReadOneAction());
                 }
                 catch (ParserError)
@@ -775,10 +895,14 @@ namespace Konklav
                     var activity = ReadActivity();
                     result.Add(activity);
                 }
-                catch (ParserError)
+                catch (ParserError e)
                 {
-                    _position = backtrackTo;
-                    break;
+                    if (e.Message.Contains("EOF"))
+                    {
+                        return result;
+                    }
+
+                    throw;
                 }
             }
 
