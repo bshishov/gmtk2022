@@ -22,7 +22,11 @@ public class GameManager : MonoBehaviour
     private Dice[] _availableDice;
 
     private RealDie _selectedDie;
+    
+    // Debug
     private bool _showGui;
+    private Vector2 _scrollPosition;
+    private bool _animationIsInProgress;
 
     private void Start()
     {   
@@ -160,7 +164,7 @@ public class GameManager : MonoBehaviour
 
     private void DraggerOnDragCompleted(Vector2 direction)
     {
-        if (_selectedDie != null && _selectedDie.State == RealDie.DieState.Selected)
+        if (CanRoll())
         {
             var relativeDragDelta = new Vector2(direction.x / Screen.width, direction.y / Screen.height);
             
@@ -202,7 +206,7 @@ public class GameManager : MonoBehaviour
         PageImage.sprite = GetSpriteByName(_activeActivity.Image(_player));
     }
 
-    private Activity RollActivity()
+    private Activity RollNewActivity()
     {
         var possible = _activities.Where(e => e.CanBeRolled(_player) && !_player.Visited(e.Name)).ToList();
         if (!possible.Any())
@@ -218,6 +222,7 @@ public class GameManager : MonoBehaviour
     
     private IEnumerator ApplyRoll(DiceRoll rolledDice)
     {
+        _animationIsInProgress = true;
         _player.Debug($"Rolled dice: {rolledDice}");
         _activeActivity.PlayerRoll(_player, rolledDice);
 
@@ -246,15 +251,20 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    nextActivity = RollActivity();
+                    nextActivity = RollNewActivity();
                 }
                 
                 StartActivity(nextActivity);
             });
         }
+
+        _animationIsInProgress = false;
     }
 
-    private Vector2 _scrollPosition;
+    private bool CanRoll()
+    {
+        return !_animationIsInProgress && _selectedDie != null && _selectedDie.State == RealDie.DieState.Selected;
+    }
     
     private void OnGUI()
     {
