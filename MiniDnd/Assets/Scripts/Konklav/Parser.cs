@@ -6,6 +6,52 @@ using System.Text;
 
 namespace Konklav
 {
+    public class AstFormatter
+    {
+        private int _indent;
+        private readonly StringBuilder _sb;
+
+        public AstFormatter()
+        {
+            _indent = 0;
+            _sb = new StringBuilder();
+        }
+
+        private void PrependIndent()
+        {
+            for (var i = 0; i < _indent; i++)
+                _sb.Append("\t");
+        }
+
+        private void Write(string text)
+        {
+            _sb.Append(text);
+        }
+
+        public void BeginNode(string text)
+        {
+            PrependIndent();
+            Write(text);
+            Write("(");
+            Write("\n");
+            _indent++;
+        }
+
+        public void Node(string text)
+        {
+            PrependIndent();
+            Write(text);
+            Write("\n");
+        }
+
+        public void End()
+        {
+            _indent--;
+        }
+
+        public override string ToString() => _sb.ToString();
+    }
+    
     public interface IContext
     {
         int LastDiceRollValue { get; }
@@ -129,6 +175,8 @@ namespace Konklav
     public interface IAction
     {
         void Execute(IContext player);
+
+        //void FormatAst(AstFormatter formatter);
     }
 
     public class TextAction : IAction
@@ -276,8 +324,6 @@ namespace Konklav
     public class ActivityAst
     {
         public string Name;
-        public IBoolExpression IsRollable;
-        public INumberExpression Weight;
         public CompositeAction CompositeAction;
     }
 

@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         //foreach (var activity in Utils.ConstructAllObjectOfType<Activity>())
         // _activities.Add(activity);
         foreach (var encounter in _activities)
-            Debug.Log($"Loaded: {encounter}");
+            Debug.Log($"Loaded: {encounter.Name}");
 
         _player = new Player(ShowTextOnCurrentPage, ShowImageOnCurrentPage);
         StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));

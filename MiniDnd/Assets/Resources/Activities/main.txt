@@ -1,25 +1,81 @@
-# start  
-/rollable true
-/weight 100
-/image test_image
-
+# start
 - Embark on adventure?
 
+if 1-5
+    - Yes    
+end
+
+if 6
+    - Nope
+    /goto start_again
+    // Тут выходим из игры (todo!)
+end
+
+
+# start_again
+- Well that was awkward, maybe we can start now?
+
+
+# Dicey-god
+/rollable true
+
+- Greetings, luckiest of gods. 
+- You've just won your personal world to rule and collect cash from. There is just one problem; your 'fellow' gods awarded you with a world full of primitive people(sore losers, I know) This world has no roulettes, no casinos and no martinies! But you will shape to have not only martinis but also blackjack and hok.. Anyway, you will do it by throwing your eminent dice over and over again until things will just work out. Let's begin
+
+if 1-6
+    -  I'm feeling lucky!
+    /end
+end
+
+
+# Dicey-god-faithfull
+/rollable true
+/weight 50
+
+- Graced by your presence, your faithful servants want to know what behavior is favorable in the eyes of their deity.
+
+
+if 1-3
+    /tag not-faithfull
+end
+
+
 if 1
-    - Ha-ha!
-    - Pathetic
+    - They should be humble and meek for I have rolled 1!
+    /end
 end
 
-if 2-4
-    // Все что начинается с дефиса - строка для страницы 
-    - Good
-    /image default    
+if 2
+    - They should be chilled and laid back
+    /tag faithfull-rolled-2
+    /end
+end 
+
+if 3 
+    - You know what? I want them to tell jokes
+    /end 
 end
 
-if 5-6 
-    - Very nice!
-    /image test_image
+if 4 
+    - I will tolerate no weakness among my followers! I want them to be strong and aggressive
+    /end 
 end
 
-# greetings    
-- Hmmm..... very nice!
+if 5 
+    - I do not want them to copy me. They need to be independent... but still worship me as they only god... or I will kill them all
+    /end
+end 
+    
+if 6 
+    - They should trust in luck and worship me by rolling the dice as often as possible
+    /end
+end
+
+
+# Dicey-god/faithfull/2
+/rollable tagged not-faithfull
+/weight 50
+
+- You come across a group of your followers. Clothed in rags they escape the summer heat by relaxing the fountain
+
+// todo: fill rolls
