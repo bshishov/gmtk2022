@@ -4,18 +4,20 @@
 
 - Embark on adventure?
 
-? 1
-- Ha-ha!
-- Pathetic
+if 1
+    - Ha-ha!
+    - Pathetic
+end
 
-? 2-4
-// Все что начинается с дефиса - строка для страницы 
-- Good
-/goto greetings
+if 2-4
+    // Все что начинается с дефиса - строка для страницы 
+    - Good
+    /goto greetings
+end
 
-? 5-6 
-- Very nice!
-
+if 5-6 
+    - Very nice!
+end
 
 # greetings    
 - Hmmm..... very nice!

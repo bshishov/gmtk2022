@@ -563,7 +563,8 @@ namespace Konklav
                 var backtrackTo = _position;
                 try
                 {
-                    ReadSingleLineBreak();            
+                    ReadSingleLineBreak();
+                    ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
                     ReadExact('-');
                     ReadCharsMaybe(AnyWhitespace, new StringBuilder());
                     var line = ReadNonEmptyStringUntilLineBreak();
@@ -595,16 +596,20 @@ namespace Konklav
 
         private IAction ReadConditional()
         {
-            ReadExact('?');
+            ReadExact("if");
             ReadNonBreakingWhitespace();
             var condition = ReadBoolExpression();
             ReadSingleLineBreak();
-            var action = ReadOneAction();
+            var action = ReadCompositeAction();
+            // ReadLineBreaks();
+            ReadCharsMaybe(AnyWhitespace, new StringBuilder());
+            ReadExact("end");
             return new ConditionalAction(condition, action);
         }
 
         private CompositeAction ReadCompositeAction()
         {
+            ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
             var actions = new List<IAction> { ReadOneAction() };
 
             while (true)
@@ -613,6 +618,7 @@ namespace Konklav
                 try
                 {
                     ReadLineBreaks();
+                    ReadCharsMaybe(AnyNonBreakingWhitespace, new StringBuilder());
                     actions.Add(ReadOneAction());
                 }
                 catch (ParserError)

@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Activities;
 using Konklav;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,21 +22,10 @@ public class GameManager : MonoBehaviour
     private Dice[] _availableDice;
 
     private RealDie _selectedDie;
+    private bool _showGui;
 
     private void Start()
-    {
-        LoadKonklavActivities();
-        
-        //foreach (var activity in Utils.ConstructAllObjectOfType<Activity>())
-        // _activities.Add(activity);
-        foreach (var encounter in _activities)
-        {
-            Debug.Log($"Loaded: {encounter}");
-        }
-        
-        _player = new Player(ShowTextOnCurrentPage);
-        StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));
-        
+    {   
         Dragger.DragCompleted += DraggerOnDragCompleted;
 
         AttackDie.MouseEnter += () => { SelectDie(AttackDie); };
@@ -51,6 +43,22 @@ public class GameManager : MonoBehaviour
         //DefenceDie.MouseExit += () => { SelectDie(null); };
         
         //SelectDie(AttackDie);
+        
+        BeginStory();
+    }
+
+    private void BeginStory()
+    {
+        _activities.Clear();
+        LoadKonklavActivities();
+        
+        //foreach (var activity in Utils.ConstructAllObjectOfType<Activity>())
+        // _activities.Add(activity);
+        foreach (var encounter in _activities)
+            Debug.Log($"Loaded: {encounter}");
+
+        _player = new Player(ShowTextOnCurrentPage);
+        StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));
     }
 
     private void LoadKonklavActivities()
@@ -81,6 +89,14 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Cheat reload
+        if (Input.GetKeyDown(KeyCode.F5))
+            BeginStory();
+
+        // Cheats menu
+        if (Input.GetKeyDown(KeyCode.F3))
+            _showGui = !_showGui;
+        
         // Transitions test
         if (Input.GetKeyDown(KeyCode.D)) Book.FlipPage(() =>
         {
@@ -131,6 +147,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private Activity GetActivityByName(string activityName)
+    {
+        return _activities.FirstOrDefault(a => a.Name.Equals(activityName));
+    }
+
     private void StartActivity(Activity activity)
     {
         // Finish last
@@ -139,7 +160,6 @@ public class GameManager : MonoBehaviour
             _player.Debug("---- End ----");
             _activeActivity.AfterEnd(_player);    
         }
-        
 
         // Start new
         if(activity == null)
@@ -184,7 +204,7 @@ public class GameManager : MonoBehaviour
                 Activity nextActivity;
                 if (_player.NextExpectedActivity != null)
                 {
-                    nextActivity = _activities.FirstOrDefault(a => a.Name.Equals(_player.NextExpectedActivity));
+                    nextActivity = GetActivityByName(_player.NextExpectedActivity);
                 }
                 else
                 {
@@ -193,6 +213,27 @@ public class GameManager : MonoBehaviour
                 
                 StartActivity(nextActivity);
             });
+        }
+    }
+
+
+    private Vector2 _scrollPosition;
+    
+    private void OnGUI()
+    {
+        if (_showGui)
+        {
+            GUILayout.BeginArea(new Rect(0, 0, Screen.width * 0.5f, Screen.height));
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+            foreach (var activity in _activities)
+            {
+                if (GUILayout.Button(activity.Name))
+                {
+                    StartActivity(GetActivityByName(activity.Name));
+                }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
         }
     }
 }
