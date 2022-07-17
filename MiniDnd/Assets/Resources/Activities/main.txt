@@ -359,26 +359,31 @@ end
 
 if 1
 	- I'll just sit in the corner and cry. My type of jam 
+	/goto end
 	/end
 end
 
 if 2
 	- Could've been better
+	/goto end
 	/end
 end
 
 if 3
 	- Where. Is. My. Martini?!
+	/goto end
 	/end
 end
 
 if 4
 	- I think it's about time to start counting income
+	/goto end
 	/end
 end
 
 if 5-6
 	- When all my humble followers will know loss and bad luck, I will make it so that everyone will always win here!
+	/goto end
 	/end
 end
 
@@ -398,3 +403,341 @@ if 6
 	/end
 end
 
+# Diceborn
+/image 16
+/rollable true
+
+	- Greeting, diceborn. This dice mark on your forehead do not lie – You are chosen!...or you somehow managed to hit a dice with your head hard enought lo leave a mark...but since these are desperate times, You truly are the Diceborn! 
+	- After millions of years of suffering under the tyranny of dicegod it has been foretold, that one day the Diceborn will come and free us from the shackles of the gambling god!
+
+if 1
+	- You know what? Sounds like a lot of pressure, I'm out
+	/goto the-end
+	/end
+end
+
+if 2
+	- oookay 
+	@born
+	/end
+end
+
+if 3-5
+	- I'm ready
+	@born
+	/end
+end
+
+if 6
+	- Right now it feels like I'm the Real god of luck
+	@born
+	/end
+end
+
+# Diceborn/symbol
+/image 17
+/rollable @born
+
+	- Every movement needs a symbol that will unite the people around it. What will be Your symbol?!
+
+if 1
+	- 1
+	/goto mads
+	/end
+end
+
+if 2
+	- 2
+	/goto mads
+	/end
+end
+
+if 3
+	- 3
+	/goto mads
+	/end
+end
+
+if 4
+	- 4
+	/goto mads
+	/end
+end
+
+if 5
+	- 5
+	/goto mads
+	/end
+end
+
+if 6
+	- 6
+	/goto mads
+	/end
+end
+
+# mads
+/image 18
+
+	- ...You DO know that you could choose ANYTHING, like a golden lion, red rose or even Mads Mikkelsen, right? 
+
+if 1-5
+	- ...Damn it! Should've chosen Mads!
+	/end
+end
+
+if 6
+	- The way of Diceborn stretches from the depths of 1 to the heights of 6
+	/end
+end
+
+# Diceborn/for the people
+/image 19
+/rollable @born
+
+	- Your journey starts to attract more and more people. The lost and jaded are looking up to you, but what do you choose to preach to them?
+
+if 1
+	- Life is not always fair and never easy, but however hard it might be for you now, the only way is to keep moving forward. 
+	- Step by step. 
+	- Every day.
+	/end
+end
+
+if 2
+	- Do not dwell over your mistakes. Learn from from them and move on.
+	- Hey, at least you haven't written events for this game) 
+	/end
+end
+
+if 3
+	- It is okay to play on easy difficulty
+	/end
+end
+
+if 4
+	- Always play on hard difficulty, life is too short to run away from challenges!
+	/end
+end
+
+If 5
+	- Pineapple pizza is actually pretty good!
+	/end
+end
+
+if 6
+	- Take chances! It is better to regret doing million silly things than not doing anything at all. You can't roll 6 without rolling the dice
+	/end
+end
+
+# Diceborn/secrecy
+/image 20
+/rollable @born
+
+	- You notice a group of diceguards beating someone.for refusing to roll an identification dice
+
+if 1-2
+	- It's is better to stay hidden.
+	@diceborn1
+	/goto secrecy1-2
+	/end
+end
+
+if 3-4
+	- I have to help, whatever it takes!
+	@diceborn1
+	/goto secrecy3-4
+	/end
+end
+
+if 5
+	- Distract diceguards by throwing a dicy rock.
+	@diceborn1
+	/goto secrecy-5
+	/end
+end
+
+if 6
+	- I am the chosen one, nothing can stop me! 
+	@diceborn1
+	/goto secrecy-6
+	/end
+end
+
+# secrecy1-2
+
+	- A very wise and not cowardly position at all!
+
+if 1-6
+	- Wha...? You do realize, I actually have NO control over my actions in this game!?
+	/end
+end
+
+# secrecy3-4
+/image 22
+	- You got beaten up really bad, but you managed to distract diceguards so that the victim escapes
+
+if 1
+	- I think I can't feel my legs
+	/end
+end
+
+if 2
+	- Is this my tooth?
+	/end
+end
+
+if 3-5
+	-  Worth it.
+	/end
+end
+
+if 6
+	- So NOW I roll 6?!
+	/end
+end
+
+# secrecy-5
+/image 23
+	- You accidentally hit one of the diceguards on the head, knocking him unconsious. 
+	- Other guards, after wandering around for a couple of minutes and looking for you, concluded that is was just a wind and left, leaving unconsious guard on the ground.
+
+if 1-3
+	- STEALTH!
+	/end
+end
+
+if 4-5
+	- Lucky...I guess...
+	/end
+end
+
+if 6
+	-I payed 60$ for this?!
+	/end
+end
+
+# secrecy-6
+/image 24
+	- With just a few confident moves you knock out all diceguards and help the poor victim
+
+if 1-5
+	- Nice 
+	/end
+end
+
+if 6
+	- LUCK IS OVERWHELMING!
+	/end
+end
+
+# Diceborn/target
+/image 25
+/rollable @born
+
+	- It's a good opportunity to attack one of the sources of oppression. The question is which?
+
+if 1-2
+	- A martini distillery! These oppressors shall know our wrath.. and a hungover I suppose 
+	@diceborn2
+	/goto target1-2
+	/end
+end
+
+if 3-5
+	- A dice factory. We will sabotage the blueprint making all dice with 1  all sides!
+	@diceborn2
+	/goto target3-5
+	/end
+end
+
+if 6
+	- We will infiltrate the casino and win all the money with my great luck!
+	@diceborn2
+	/goto target6
+	/end
+end
+
+# target1-2
+/image 26
+	- As a result of your attack the production of machines plummets and the number of headaches among population skyrocket. You cruelty knows no limits!
+
+if 1-3
+	- The path to a better world lies through sobriety
+	/end
+end
+
+if 4-5
+	- They can always switch to other beverages.
+	/end
+end
+
+if 6
+	- With clear mind people will see that they are being oppressed and join us in the fight!
+	/end
+end
+
+# target3-5
+/image 27
+	- With new dices having just one number on all sides, gambling loses all sense.
+
+if 1-6
+	- This is the way
+	/end
+end
+
+# target6
+/image 28
+	- Even though winning jackpot after jackpot at the casino does not necessarily help your fight, no one can deny your luck
+
+if 1-3
+	- Ok, how do I spend money in this game?
+	/goto Diceborn/target/6
+	/end
+end
+
+if 4-5
+	- Check out my new golden Rolex!
+	/end
+end
+
+if 6
+	- Yes, I'am THAT good!
+	/end
+end
+
+# Diceborn/target/6
+/image 29
+	- You...can't
+
+if 1-6
+	- Nooo!
+	/end
+end
+
+# Diceborn/change
+/image 30
+/rollable @diceborn1 and @diceborn2
+	- Many people support you and your cause, it is time to demand changes!
+
+if 1
+	- 1 Let's just kill all who oppose us. Remember, no mercy, no russian
+	/goto end	
+	/end
+end
+
+if 2-3
+	- We will decapitate the leadership and the rest will fall in line	
+	/goto end
+	/end
+end
+
+if 3-6
+	- We will know fight fire with fire. Enough blood and martini has been spilled. 
+	/goto end	
+	/end
+end
+
+# end
+
+	- The End.
