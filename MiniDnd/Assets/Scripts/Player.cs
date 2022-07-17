@@ -12,10 +12,12 @@ public class Player : IContext
     public HashSet<string> VisitedHashSet = new HashSet<string>();
     public string CurrentActivity;
     private readonly Action<string> _showTextCallback;
+    private readonly Action<string> _showImageCallback;
 
-    public Player(Action<string> showTextCallback)
+    public Player(Action<string> showTextCallback, Action<string> showImageCallback)
     {
         _showTextCallback = showTextCallback;
+        _showImageCallback = showImageCallback;
     }
 
     public void EndEncounter()
@@ -56,5 +58,10 @@ public class Player : IContext
     public void Debug(string message)
     {
         UnityEngine.Debug.Log($"[{CurrentActivity}] {message}");   
+    }
+
+    public void ShowImage(string imageName)
+    {
+        _showImageCallback?.Invoke(imageName);
     }
 }

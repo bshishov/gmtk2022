@@ -1,6 +1,7 @@
 # start  
 /rollable true
 /weight 100
+/image test_image
 
 - Embark on adventure?
 
@@ -12,11 +13,12 @@ end
 if 2-4
     // Все что начинается с дефиса - строка для страницы 
     - Good
-    /goto greetings
+    /image default    
 end
 
 if 5-6 
     - Very nice!
+    /image test_image
 end
 
 # greetings    

@@ -35,12 +35,27 @@ public class Book : MonoBehaviour
     {
         StartCoroutine(ChangeTextAnimation(callback));
     }
+    
+    public void ChangeImage(Action callback)
+    {
+        StartCoroutine(ChangeImageAnimation(callback));
+    }
 
     private IEnumerator ChangeTextAnimation(Action callback)
     {
+        // Todo: fix left-right
         LeftPage.TransitionOut(PageTransitionTime);
         yield return new WaitForSeconds(0.2f);
         callback?.Invoke();
         LeftPage.TransitionIn(PageTransitionTime);
+    }
+    
+    private IEnumerator ChangeImageAnimation(Action callback)
+    {
+        // Todo: fix left-right
+        RightPage.TransitionOut(PageTransitionTime);
+        yield return new WaitForSeconds(0.2f);
+        callback?.Invoke();
+        RightPage.TransitionIn(PageTransitionTime);
     }
 }

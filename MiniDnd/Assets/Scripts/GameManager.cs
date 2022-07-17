@@ -4,6 +4,7 @@ using System.Linq;
 using Konklav;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RealDie AttackDie;
     [SerializeField] private Book Book;
     [SerializeField] private TextMeshProUGUI PageText;
+    [SerializeField] private Image PageImage;
 
     private Player _player;
     private readonly List<Activity> _activities = new List<Activity>();
@@ -50,7 +52,7 @@ public class GameManager : MonoBehaviour
         foreach (var encounter in _activities)
             Debug.Log($"Loaded: {encounter}");
 
-        _player = new Player(ShowTextOnCurrentPage);
+        _player = new Player(ShowTextOnCurrentPage, ShowImageOnCurrentPage);
         StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));
     }
 
@@ -78,6 +80,27 @@ public class GameManager : MonoBehaviour
         {
             PageText.text = text;
         });
+    }
+    
+    private void ShowImageOnCurrentPage(string imageName)
+    {
+        Book.ChangeImage(() =>
+        {
+            PageImage.sprite = GetSpriteByName(imageName);
+        });
+    }
+
+    private Sprite GetSpriteByName(string imageName)
+    {
+        if (imageName == null)
+            imageName = "default";        
+        
+        var sprite = Resources.Load<Sprite>($"Images/{imageName}");
+        if (sprite == null)
+        {
+            Debug.LogWarning($"Failed to load sprite {imageName}");
+        }
+        return sprite;
     }
 
     private void Update()
@@ -170,7 +193,9 @@ public class GameManager : MonoBehaviour
         _player.CurrentActivity = activity.Name;
         _player.Debug("---- Start ----");
         _activeActivity.BeforeStart(_player);
+        
         PageText.text = _activeActivity.Text(_player);
+        PageImage.sprite = GetSpriteByName(_activeActivity.Image(_player));
     }
 
     private Activity RollActivity()

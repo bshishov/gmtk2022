@@ -14,6 +14,7 @@ namespace Konklav
         bool Visited(string activityName);
         void End();
         void Debug(string message);
+        void ShowImage(string imageName);
     }
 
 
@@ -221,6 +222,22 @@ namespace Konklav
         }
     
         public void Execute(IContext player) { }
+    }
+
+    public class ImageAction : IAction
+    {
+        public readonly string ImageName;
+
+        public ImageAction(string imageName)
+        {
+            ImageName = imageName;
+        }
+
+        public void Execute(IContext player)
+        {
+            player.Debug($"Image: {ImageName}");
+            player.ShowImage(ImageName);
+        }
     }
 
     public class ActivityAst
@@ -529,6 +546,9 @@ namespace Konklav
                 case "rollable":
                     ReadNonBreakingWhitespace();
                     return new RollableAttribAction(ReadBoolExpression());
+                case "image":
+                    ReadNonBreakingWhitespace();
+                    return new ImageAction(ReadNonEmptyStringUntilWhitespace());
                 case "weight":
                     ReadNonBreakingWhitespace();
                     return new WeighAttribAction(ReadNumberExpression());

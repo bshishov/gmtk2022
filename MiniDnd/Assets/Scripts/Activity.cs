@@ -8,6 +8,7 @@ public abstract class Activity
     public virtual float Weight(Player player) => 100f;
     public virtual string Name => GetType().Name;
     public abstract string Text(Player player);
+    public virtual string Image(Player player) => null;
     public virtual Dice[] AvailableDice(Player player) => Array.Empty<Dice>();
     public virtual bool CanBeRolled(Player player) => false;
     public abstract void PlayerRoll(Player player, DiceRoll roll);
@@ -21,15 +22,17 @@ public class KonklavActivity: Activity
     private readonly IAction _playerAction;
     private readonly IBoolExpression _rollableExpression;
     private readonly INumberExpression _weightExpression;
+    private readonly string _defaultImage;
     public override string Name { get; }
 
-    public KonklavActivity(string name, TextAction defaultTextAction, IAction playerAction, IBoolExpression rollableExpression, INumberExpression weightExpression)
+    public KonklavActivity(string name, TextAction defaultTextAction, string defaultImage, IAction playerAction, IBoolExpression rollableExpression, INumberExpression weightExpression)
     {
         Name = name;
         _defaultTextAction = defaultTextAction;
         _playerAction = playerAction;
         _rollableExpression = rollableExpression;
         _weightExpression = weightExpression;
+        _defaultImage = defaultImage;
     }
     
     public override bool CanBeRolled(Player player)
@@ -47,10 +50,8 @@ public class KonklavActivity: Activity
         return 100f;
     }
 
-    public override string Text(Player player)
-    {
-        return _defaultTextAction.Text;
-    }
+    public override string Text(Player player) => _defaultTextAction.Text;
+    public override string Image(Player player) => _defaultImage;
 
     public override void PlayerRoll(Player player, DiceRoll roll)
     {
@@ -66,18 +67,18 @@ public class KonklavActivity: Activity
             Debug.LogError($"Missing default text action for '{ast.Name}'");    
         }
         
-        
+        var defaultImageAction = ast.CompositeAction.Actions.OfType<ImageAction>().FirstOrDefault();
         var weightAttrib = ast.CompositeAction.Actions.OfType<WeighAttribAction>().FirstOrDefault();
         var rollableAttrib = ast.CompositeAction.Actions.OfType<RollableAttribAction>().FirstOrDefault();
 
         var otherActions =
-            ast.CompositeAction.Actions.Where(a => a != defaultTextAction && a != weightAttrib && a != rollableAttrib)
+            ast.CompositeAction.Actions.Where(a => a != defaultTextAction && a != weightAttrib && a != rollableAttrib && a != defaultImageAction)
                 .ToList();
         
         if (!otherActions.Any())
             Debug.LogWarning($"No player actions defined for '{ast.Name}'");
         
         var playerAction = new CompositeAction(otherActions);
-        return new KonklavActivity(ast.Name, defaultTextAction, playerAction, rollableAttrib?.Condition, weightAttrib?.Expression);
+        return new KonklavActivity(ast.Name, defaultTextAction, defaultImageAction?.ImageName, playerAction, rollableAttrib?.Condition, weightAttrib?.Expression);
     }
 }

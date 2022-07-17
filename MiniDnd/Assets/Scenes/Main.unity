@@ -1990,6 +1990,7 @@ MonoBehaviour:
   AttackDie: {fileID: 350521899}
   Book: {fileID: 239639151}
   PageText: {fileID: 1763783210}
+  PageImage: {fileID: 1929596214}
 --- !u!4 &1817067956
 Transform:
   m_ObjectHideFlags: 0
