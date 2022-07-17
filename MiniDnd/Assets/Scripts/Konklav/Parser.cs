@@ -15,6 +15,8 @@ namespace Konklav
         void End();
         void Debug(string message);
         void ShowImage(string imageName);
+        void SetTag(string tag);
+        bool HasTag(string tag);
     }
 
 
@@ -92,6 +94,21 @@ namespace Konklav
         public bool Evaluate(IContext player) => player.Visited(ActivityName);
     }
 
+    public class HasTagExpression : IBoolExpression
+    {
+        public readonly string Tag;
+        
+        public HasTagExpression(string tag)
+        {
+            Tag = tag;
+        }
+
+        public bool Evaluate(IContext player)
+        {
+            return player.HasTag(Tag);
+        }
+    }
+
     public interface INumberExpression
     {
         float EvaluateAsFloat(IContext player);
@@ -143,6 +160,22 @@ namespace Konklav
         {
             player.Debug($"/goto {_activityName}");
             player.Goto(_activityName);
+        }
+    }
+    
+    public class TagAction : IAction
+    {
+        public readonly string TagName;
+
+        public TagAction(string tagName)
+        {
+            TagName = tagName;
+        }
+
+        public void Execute(IContext player)
+        {
+            player.Debug($"/tag {TagName}");
+            player.SetTag(TagName);
         }
     }
     
@@ -475,11 +508,19 @@ namespace Konklav
         
         public IBoolExpression ReadOneBoolExpressionElement() => ReadOr(
             ReadVisitedExpression,
+            ReadHasTag,
             ReadRangeDiceResultExpression,
             ReadExactDiceResultExpression,
             ReadLiteralTrue, 
             ReadLiteralFalse
         );
+        
+        public HasTagExpression ReadHasTag()
+        {
+            ReadExact("tagged");
+            ReadNonBreakingWhitespace();
+            return new HasTagExpression(ReadNonEmptyStringUntilWhitespace());   
+        }
 
         public IBoolExpression ReadVisitedExpression()
         {
@@ -555,6 +596,9 @@ namespace Konklav
                 case "goto":
                     ReadNonBreakingWhitespace();
                     return new GotoAction(ReadNonEmptyStringUntilWhitespace());
+                case "tag":
+                    ReadNonBreakingWhitespace();
+                    return new TagAction(ReadNonEmptyStringUntilWhitespace());
                 case "end":
                     return new EndAction();
                 default:

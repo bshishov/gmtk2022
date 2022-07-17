@@ -10,6 +10,7 @@ public class Player : IContext
     public string NextExpectedActivity;
     public DiceRoll LastDiceRoll;
     public HashSet<string> VisitedHashSet = new HashSet<string>();
+    public HashSet<string> Tags = new HashSet<string>();
     public string CurrentActivity;
     private readonly Action<string> _showTextCallback;
     private readonly Action<string> _showImageCallback;
@@ -63,5 +64,15 @@ public class Player : IContext
     public void ShowImage(string imageName)
     {
         _showImageCallback?.Invoke(imageName);
+    }
+
+    public void SetTag(string tag)
+    {
+        Tags.Add(tag.ToLowerInvariant());
+    }
+
+    public bool HasTag(string tag)
+    {
+        return Tags.Contains(tag.ToLowerInvariant());
     }
 }
