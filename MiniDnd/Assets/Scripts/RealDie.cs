@@ -233,7 +233,7 @@ public class RealDie : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(200, 10, 100, 20), State.ToString());
+        //GUI.Label(new Rect(200, 10, 100, 20), State.ToString());
     }
 
     private void OnCollisionEnter(Collision other)
