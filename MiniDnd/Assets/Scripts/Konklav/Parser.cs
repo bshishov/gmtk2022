@@ -526,6 +526,7 @@ namespace Konklav
         private T ReadOr<T>(params Func<T>[] readers)
         {
             var startPosition = _position;
+            var errors = new List<ParserError>();
 
             foreach (var readerFunction in readers)
             {
@@ -534,10 +535,14 @@ namespace Konklav
                 {
                     return readerFunction();
                 }
-                catch (ParserError) { }   
+                catch (ParserError e)
+                {
+                    errors.Add(e);
+                }   
             }
-        
-            throw Error("Or failed");
+
+            var errorsFmt = string.Join("\n\t", errors.Select(e => e.Message)); 
+            throw Error($"Or failed:\n{errorsFmt}");
         }
 
         private List<T> ReadOneOrMore<T>(Func<T> reader)
@@ -675,6 +680,7 @@ namespace Konklav
         public IBoolExpression ReadOneBoolExpressionElement() => ReadOr(
             ReadVisitedExpression,
             ReadHasTag,
+            ReadHasTagSugar,
             ReadRangeDiceResultExpression,
             ReadExactDiceResultExpression,
             ReadLiteralTrue, 
@@ -685,6 +691,12 @@ namespace Konklav
         {
             ReadExact("tagged");
             ReadNonBreakingWhitespace();
+            return new HasTagExpression(ReadNonEmptyStringUntilWhitespace());   
+        }
+        
+        public HasTagExpression ReadHasTagSugar()
+        {
+            ReadExact('@');
             return new HasTagExpression(ReadNonEmptyStringUntilWhitespace());   
         }
 
@@ -818,10 +830,18 @@ namespace Konklav
 
         private IAction ReadOneAction() => ReadOr(
             ReadCommand,
+            ReadTagActionSugar,
             ReadDebug,
             ReadConditional,
             ReadTextAction
         );
+
+        private TagAction ReadTagActionSugar()
+        {
+            ReadExact('@');
+            var tag = ReadNonEmptyStringUntilWhitespace();
+            return new TagAction(tag);
+        }
 
         private IAction ReadConditional()
         {

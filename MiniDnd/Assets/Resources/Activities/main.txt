@@ -25,58 +25,58 @@ end
 
 if 1-6
     -  I'm feeling lucky!
-    /tag god
+    @god
     /end
 end
 
 
 # Dicey-god-faithfull
-/rollable tagged god
+/rollable @god
 /weight 50
 
 - Graced by your presence, your faithful servants want to know what behavior is favorable in the eyes of their deity.
 
 if 1
     - They should be humble and meek for I have rolled 1!
-    /tag faithful-1
+    @faithful-1
     /end
 end
 
 if 2
     - They should be chilled and laid back
-    /tag faithfull-rolled-2
-    /tag faithful-2
+    @faithfull-rolled-2
+    @faithful-2
     /end
 end 
 
 if 3 
     - You know what? I want them to tell jokes
-    /tag faithfull-rolled-3
-    /tag faithful-3
+    @faithfull-rolled-3
+    @faithful-3
     /end 
 end
 
 if 4 
     - I will tolerate no weakness among my followers! I want them to be strong and aggressive
-    /tag faithfull-rolled-4
+    @faithfull-rolled-4
     /end 
 end
 
 if 5 
     - I do not want them to copy me. They need to be independent... but still worship me as they only god... or I will kill them all
-    /tag faithfull-rolled-5
+    @faithfull-rolled-5
     /end
 end 
     
 if 6 
     - They should trust in luck and worship me by rolling the dice as often as possible
-    /tag faithful-6
+    @faithful-6
     /end
 end
 
 
 # Dicey-god/faithfull/2
-/rollable tagged faithfull-rolled-2
+/rollable @faithfull-rolled-2
 /weight 50
 
 - You come across a group of your followers. Clothed in rags they escape the summer heat by relaxing the fountain
@@ -103,7 +103,7 @@ if 6
 end
 
 # Dicey-god/faithfull/3
-/rollable tagged faithfull-rolled-3
+/rollable @faithfull-rolled-3
 /weight 50
 
 	- You were approached by a group of grinning followers. "Sup, god. Wanna know how we make holy water? We boil the hell out of it!"
@@ -124,7 +124,7 @@ if 6
 end
 
 # Dicey-god/faithfull/4
-/rollable tagged faithfull-rolled-4
+/rollable @faithfull-rolled-4
 /weight 50
 
 	- You stumbled upon a circle shouting followers. 
@@ -148,7 +148,7 @@ if 6
 end
 
 # Dicey-god/faithfull/5
-/rollable faithfull-rolled-5
+/rollable @faithfull-rolled-5
 /weight 50
 
 	- A profane idea is spreading amongst your folk. 
@@ -160,38 +160,38 @@ if 1-6
 end
 
 # Dicey-god/money
-/rollable tagged god
+/rollable @god
 /weight 50
 
 	- Before thinking of opening any casinos first, you need to teach your people what Money is.
 
 if 1
 	- Money is an amount of martinis I can afford. Now that I think about it, let martini be our currency, why not?
-	/tag money-rolled-1
+	@money-rolled-1
 	/end
 end
 
 if 2-3
 	- Money is gold coins that you bet in a casino until you have enough coins to swim in a pool full of them
-	/tag money-2-3
+	@money-2-3
 	/end
 end
 
 if 4-5
 	- Money is an amount of bottle caps you have. Therefore, we need to build a factory of bottles, produce a bottle, collect a cap from it, throw the bottle away and repeat.
-	/tag money-rolled-4-5
-	/tag money-4-5
+	@money-rolled-4-5
+	@money-4-5
 	/end
 end
 
 if 6
 	- Money is a number of souls in your possession. First, you bet your soul, win another persons soul, repeat, lose all souls and start over at a bonfire or something 
-	/tag money-rolled-6
+	@money-rolled-6
 	/end
 end
 
 # Dicey-god/money/1
-/rollable money-rolled-1
+/rollable @money-rolled-1
 
 	- Being bored after rolling the dice for like 1 minute you decide to take a walk. 
 	- You approach the market of your followers. Everyone has their personal bucket filled with martini. When people need to buy something they weight the respective buckets, and then transfuse between them. The richest people have entire pools of martini. Unfortunately, being a liquid, martini tends to slowly evaporate. 
@@ -213,7 +213,7 @@ if 5-6
 end
 
 # Dicey-god/money/4-5
-/rollable money-rolled-4-5
+/rollable @money-rolled-4-5
 
 	- For some reason your personal world starts to be littered with awful amount of bottles
 
@@ -233,7 +233,7 @@ if 6
 end
 
 # Dicey-god/money/6
-/rollable money-rolled-6
+/rollable @money-rolled-6
 
 	- Lately you've noticed that your folk have adopted an interesting taste in music. An epic orchestral music playing on the streets of your small world.... Wait... Why is that guy is all red? Invader!
 
@@ -248,7 +248,7 @@ if 6
 end
 
 # Dicey-god/game
-/rollable tagged god
+/rollable @god
 /weight 50
 
 	- It is clear that the activities in the casinos will revolve around rolling the dice, but what game the visitor will play exactly?
@@ -258,13 +258,13 @@ if 1
 	- Then again. 
 	- Then again. 
 	- The rolled numbers bear no weight for this is an attrition game, you see? Whoever stays last at the table wins. Exiting! A game of wills! Wh...Why are looking at me like that?
-	/tag game-rolled-1
+	@game-rolled-1
 	/end
 end
 
 if 2-3
 	- Two players roll their dice. Whoever has a higher number wins. Easy, effective... Probably, somewhat boring as well.
-	/tag game-2-3
+	@game-2-3
 	/end
 end
 
@@ -273,8 +273,8 @@ if 4-5
 	- Then again. 
 	- If at your current roll you get a number that was previously rolled by you – you lose Whoever stays the longest wins. 
 	- If you manage to roll all 6 numbers then everyone gets a prize!
-	/tag game-rolled-4-5
-	/tag game-4-5
+	@game-rolled-4-5
+	@game-4-5
 	/end
 end
 
@@ -285,7 +285,7 @@ if 6
 end
 
 # Dicey-god/game/1
-/rollable tagged game-rolled-1
+/rollable @game-rolled-1
 
 	- For some inexplicable reason the game you promoted is not very popular among your dimwitted followers
 
@@ -300,7 +300,7 @@ if 5-6
 end
 
 # Dicey-god/game/4-5
-/rollable tagged game-rolled-4-5
+/rollable @game-rolled-4-5
 
 	- Your luckyness! The game you proposed is very popular among people. Great success!
 
@@ -316,12 +316,12 @@ end
 
 if 6
 	- Is this the real life?
-	/tag fantasy
+	@fantasy
 	/end
 end
 
 # Dicey-god/game/fantasy
-/rollable tagged fantasy
+/rollable @fantasy
 
 	- Is this just fantasy?
 
@@ -330,8 +330,8 @@ if 1-6
 	/end
 end
 
-# Dicey-god/casino success
-/rollable tagged money-2-3 or money-4-5 and game-2-3 or game 4-5 and faithful-1 or faithful-2 or faithful-3 or faithful-6
+# Dicey-god/casino/success
+/rollable @money-2-3 or @money-4-5 and @game-2-3 or @game-4-5 and @faithful-1 or @faithful-2 or @faithful-3 or @faithful-6
 
 	- Finally, it is time to open a casino. 
 	- To be completely honest, these 5 minutes without gambling were utter torture! 
