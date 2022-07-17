@@ -2,7 +2,8 @@
 - Embark on adventure?
 
 if 1-5
-    - Yes    
+    - Yes   
+    /end 
 end
 
 if 6
@@ -24,58 +25,339 @@ end
 
 if 1-6
     -  I'm feeling lucky!
+    /tag god
     /end
 end
 
 
 # Dicey-god-faithfull
-/rollable true
+/rollable tagged god
 /weight 50
 
 - Graced by your presence, your faithful servants want to know what behavior is favorable in the eyes of their deity.
 
-
-if 1-3
-    /tag not-faithfull
-end
-
-
 if 1
     - They should be humble and meek for I have rolled 1!
+    /tag faithful-1
     /end
 end
 
 if 2
     - They should be chilled and laid back
     /tag faithfull-rolled-2
+    /tag faithful-2
     /end
 end 
 
 if 3 
     - You know what? I want them to tell jokes
+    /tag faithfull-rolled-3
+    /tag faithful-3
     /end 
 end
 
 if 4 
     - I will tolerate no weakness among my followers! I want them to be strong and aggressive
+    /tag faithfull-rolled-4
     /end 
 end
 
 if 5 
     - I do not want them to copy me. They need to be independent... but still worship me as they only god... or I will kill them all
+    /tag faithfull-rolled-5
     /end
 end 
     
 if 6 
     - They should trust in luck and worship me by rolling the dice as often as possible
+    /tag faithful-6
     /end
 end
 
 
 # Dicey-god/faithfull/2
-/rollable tagged not-faithfull
+/rollable tagged faithfull-rolled-2
 /weight 50
 
 - You come across a group of your followers. Clothed in rags they escape the summer heat by relaxing the fountain
 
-// todo: fill rolls
+if 1
+	- Driven by your empathy you decide to make fountain, rain gold instead of water so that your followers could afford a better clothes... and air conditioning. 
+	- Accidentally not only water turned into gold, but people as well... At least the fountain looks nicer now.
+	/end
+end
+
+if 2-3
+	- You try to chill with the people, but do not manage to spark an interesting conversation, considering the fact that you roll the dice before saying anything. Pretty awkward
+	/end
+end
+
+if 4-5
+	- You pleasantly spend your time by chilling and having and interesting conversation with the people
+	/end
+end
+
+if 6
+	- After having a blast swimming in the fountain and chatting with the followers you turn water into liquid gold as an act of divine favor. That's how hobos became millionaires!
+	/end
+end
+
+# Dicey-god/faithfull/3
+/rollable tagged faithfull-rolled-3
+/weight 50
+
+	- You were approached by a group of grinning followers. "Sup, god. Wanna know how we make holy water? We boil the hell out of it!"
+
+if 1-3 
+	- WHAT HAVE I DONE?!
+	/end
+end
+
+if 4-5
+	- Yeah... really... great joke, guys
+	/end
+end
+
+if 6
+	- Actually, you just need to add a little ice and a lot of vodka
+	/end
+end
+
+# Dicey-god/faithfull/4
+/rollable tagged faithfull-rolled-4
+/weight 50
+
+	- You stumbled upon a circle shouting followers. 
+	- In the center two men were aggressively insulting each other. 
+	- 20 minutes of insults later they finally started fighting. 
+	- Shortly  after one of the participants was knocked out. Quite anticlimactic 
+
+if 1-3
+	- My disappointment is immeasurable, and my day is ruined
+	/end
+end
+
+if 4-5
+	- At least now it is over
+	/end
+end
+
+if 6
+	- Pretty sure I can find a way to monetize this
+	/end
+end
+
+# Dicey-god/faithfull/5
+/rollable faithfull-rolled-5
+/weight 50
+
+	- A profane idea is spreading amongst your folk. 
+	- Some heretics are saying that 6 sided dice is a lie and the true divine dice has 20 sides!
+
+if 1-6
+	- Impossible! The 6 sided dice is perfect in every way. Kill all heretics!
+	/end
+end
+
+# Dicey-god/money
+/rollable tagged god
+/weight 50
+
+	- Before thinking of opening any casinos first, you need to teach your people what Money is.
+
+if 1
+	- Money is an amount of martinis I can afford. Now that I think about it, let martini be our currency, why not?
+	/tag money-rolled-1
+	/end
+end
+
+if 2-3
+	- Money is gold coins that you bet in a casino until you have enough coins to swim in a pool full of them
+	/tag money-2-3
+	/end
+end
+
+if 4-5
+	- Money is an amount of bottle caps you have. Therefore, we need to build a factory of bottles, produce a bottle, collect a cap from it, throw the bottle away and repeat.
+	/tag money-rolled-4-5
+	/tag money-4-5
+	/end
+end
+
+if 6
+	- Money is a number of souls in your possession. First, you bet your soul, win another persons soul, repeat, lose all souls and start over at a bonfire or something 
+	/tag money-rolled-6
+	/end
+end
+
+# Dicey-god/money/1
+/rollable money-rolled-1
+
+	- Being bored after rolling the dice for like 1 minute you decide to take a walk. 
+	- You approach the market of your followers. Everyone has their personal bucket filled with martini. When people need to buy something they weight the respective buckets, and then transfuse between them. The richest people have entire pools of martini. Unfortunately, being a liquid, martini tends to slowly evaporate. 
+	- People are now calling it inflation
+
+if 1-2
+	- Well... at least there is plenty of martini, am I right?
+	/end
+end
+
+if 3-4
+	- Sign, should've chosen vodka instead
+	/end
+end
+
+if 5-6
+	- A small price to pay for an afternoon martini
+	/end
+end
+
+# Dicey-god/money/4-5
+/rollable money-rolled-4-5
+
+	- For some reason your personal world starts to be littered with awful amount of bottles
+
+if 1-3
+	- We can't do anything about it, our whole economy is based on those bottles!
+	/end
+end
+
+if 4-5
+	- We can use the same bottle twice to produce two caps instead of one!
+	/end
+end
+
+if 6
+	- Greed... greed never changes
+	/end
+end
+
+# Dicey-god/money/6
+/rollable money-rolled-6
+
+	- Lately you've noticed that your folk have adopted an interesting taste in music. An epic orchestral music playing on the streets of your small world.... Wait... Why is that guy is all red? Invader!
+
+if 1-5
+	- Since you can't lose your mighty soul the quick defeat is not as humiliating.
+	/end
+end
+
+if 6
+	- Git gut, scrub
+	/end
+end
+
+# Dicey-god/game
+/rollable tagged god
+/weight 50
+
+	- It is clear that the activities in the casinos will revolve around rolling the dice, but what game the visitor will play exactly?
+
+if 1
+	- Two players role their respective dices. 
+	- Then again. 
+	- Then again. 
+	- The rolled numbers bear no weight for this is an attrition game, you see? Whoever stays last at the table wins. Exiting! A game of wills! Wh...Why are looking at me like that?
+	/tag game-rolled-1
+	/end
+end
+
+if 2-3
+	- Two players roll their dice. Whoever has a higher number wins. Easy, effective... Probably, somewhat boring as well.
+	/tag game-2-3
+	/end
+end
+
+if 4-5
+	- Any number of players roll their dices. 
+	- Then again. 
+	- If at your current roll you get a number that was previously rolled by you – you lose Whoever stays the longest wins. 
+	- If you manage to roll all 6 numbers then everyone gets a prize!
+	/tag game-rolled-4-5
+	/tag game-4-5
+	/end
+end
+
+if 6
+	- Whoever rolls 6 gets to roll again!
+	/goto Dicey-god/game
+	/end
+end
+
+# Dicey-god/game/1
+/rollable tagged game-rolled-1
+
+	- For some inexplicable reason the game you promoted is not very popular among your dimwitted followers
+
+if 1-4
+	- Really?
+	/end
+end
+
+if 5-6
+	- Clearly my ideas are too brilliant for others to perceive them!
+	/end
+end
+
+# Dicey-god/game/4-5
+/rollable tagged game-rolled-4-5
+
+	- Your luckyness! The game you proposed is very popular among people. Great success!
+
+if 1
+	- Sometimes even I am frightened of my own genius.
+	/end
+end
+
+if 2-5
+	- Wherever I go, success follows
+	/end
+end
+
+if 6
+	- Is this the real life?
+	/tag fantasy
+	/end
+end
+
+# Dicey-god/game/fantasy
+/rollable tagged fantasy
+
+	- Is this just fantasy?
+
+if 1-6
+	- Caught in a landsli.....Alright let's continue
+	/end
+end
+
+# Dicey-god/casino success
+/rollable tagged money-2-3 or money-4-5 and game-2-3 or game 4-5 and faithful-1 or faithful-2 or faithful-3 or faithful-6
+
+	- Finally, it is time to open a casino. 
+	- To be completely honest, these 5 minutes without gambling were utter torture! 
+	- Luckily, due to your lucky decisions the casino world was a huge success. How do you wish to celebrate this Grand opening?
+
+if 1
+	- I'll just sit in the corner and cry. My type of jam 
+	/end
+end
+
+if 2
+	- Could've been better
+	/end
+end
+
+if 3
+	- Where. Is. My. Martini?!
+	/end
+end
+
+if 4
+	- I think it's about time to start counting income
+	/end
+end
+
+if 5-6
+	- When all my humble followers will know loss and bad luck, I will make it so that everyone will always win here!
+	/end
+end
