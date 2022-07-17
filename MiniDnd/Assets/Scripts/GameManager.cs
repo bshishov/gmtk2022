@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Konklav;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -28,6 +30,9 @@ public class GameManager : MonoBehaviour
     private Vector2 _scrollPosition;
     private bool _animationIsInProgress;
 
+    private const string WebSource =
+        "https://gist.githubusercontent.com/bshishov/35eefa64b794b2003eb99b51083155ed/raw/main.txt";
+
     private void Start()
     {   
         Dragger.DragCompleted += DraggerOnDragCompleted;
@@ -44,19 +49,13 @@ public class GameManager : MonoBehaviour
         };
 
         // SelectDie(AttackDie);
+        LoadKonklavActivities();
         BeginStory();
+        StartCoroutine(LoadWebContent());
     }
 
     private void BeginStory()
     {
-        _activities.Clear();
-        LoadKonklavActivities();
-        
-        //foreach (var activity in Utils.ConstructAllObjectOfType<Activity>())
-        // _activities.Add(activity);
-        foreach (var encounter in _activities)
-            Debug.Log($"Loaded: {encounter.Name}");
-
         _player = new Player(ShowTextOnCurrentPage, ShowImageOnCurrentPage);
         StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));
     }
@@ -66,21 +65,62 @@ public class GameManager : MonoBehaviour
         var activitySourceFiles = Resources.LoadAll<TextAsset>("Activities");
         foreach (var sourceFile in activitySourceFiles)
         {
-            var parser = new Parser(sourceFile.text + "\n");
-            var activities = parser.ReadActivities();
+            LoadAllActivitiesFromSource(sourceFile.text);
+        }
+    }
 
-            foreach (var activityAst in activities)
+    private void LoadAllActivitiesFromSource(string source)
+    {
+        var parser = new Parser(source + "\n");
+        var activities = parser.ReadActivities();
+
+        foreach (var activityAst in activities)
+        {
+            var newActivityName = activityAst.Name;
+            var formatter = new AstFormatter();
+            activityAst.FormatAst(formatter);
+
+            Debug.Log($"Loaded {newActivityName} \n {formatter}");
+
+            try
             {
-                var formatter = new AstFormatter();
-                activityAst.FormatAst(formatter);
-
-                Debug.Log($"Loaded {activityAst.Name} \n {formatter}");
-
-
                 var activity = KonklavActivity.FromAst(activityAst);
+                _activities.RemoveAll(a => a.Name.Equals(newActivityName));
                 _activities.Add(activity); 
             }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Failed to load activity {newActivityName}: {e}");
+                throw;
+            }
         }
+    }
+
+    private IEnumerator LoadWebContent()
+    {
+        yield return new WaitForSeconds(1f);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(WebSource))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log("Loading web content...");
+                    LoadAllActivitiesFromSource(webRequest.downloadHandler.text);
+                    break;
+            }
+        }
+        
+        BeginStory();
     }
 
     private void ShowTextOnCurrentPage(string text)
