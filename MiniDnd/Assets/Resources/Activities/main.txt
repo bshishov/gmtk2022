@@ -1,4 +1,5 @@
 # start
+/image 1
 - Embark on adventure?
 
 if 1-5
@@ -14,10 +15,12 @@ end
 
 
 # start_again
+
 - Well that was awkward, maybe we can start now?
 
 
 # Dicey-god
+/image 3
 /rollable true
 
 - Greetings, luckiest of gods. 
@@ -31,6 +34,7 @@ end
 
 
 # Dicey-god-faithfull
+/image 2
 /rollable @god
 /weight 50
 
@@ -38,21 +42,21 @@ end
 
 if 1
     - They should be humble and meek for I have rolled 1!
-    @faithful-1
+    @faithful-t
     /end
 end
 
 if 2
     - They should be chilled and laid back
     @faithfull-rolled-2
-    @faithful-2
+    @faithful-t
     /end
 end 
 
 if 3 
     - You know what? I want them to tell jokes
     @faithfull-rolled-3
-    @faithful-3
+    @faithful-t
     /end 
 end
 
@@ -70,12 +74,13 @@ end
     
 if 6 
     - They should trust in luck and worship me by rolling the dice as often as possible
-    @faithful-6
+    @faithful-t
     /end
 end
 
 
 # Dicey-god/faithfull/2
+/image 4
 /rollable @faithfull-rolled-2
 /weight 50
 
@@ -103,6 +108,7 @@ if 6
 end
 
 # Dicey-god/faithfull/3
+/image 3
 /rollable @faithfull-rolled-3
 /weight 50
 
@@ -124,6 +130,7 @@ if 6
 end
 
 # Dicey-god/faithfull/4
+/image 5
 /rollable @faithfull-rolled-4
 /weight 50
 
@@ -148,6 +155,7 @@ if 6
 end
 
 # Dicey-god/faithfull/5
+/image 6
 /rollable @faithfull-rolled-5
 /weight 50
 
@@ -160,6 +168,7 @@ if 1-6
 end
 
 # Dicey-god/money
+/image 7
 /rollable @god
 /weight 50
 
@@ -168,29 +177,32 @@ end
 if 1
 	- Money is an amount of martinis I can afford. Now that I think about it, let martini be our currency, why not?
 	@money-rolled-1
+	@money-f
 	/end
 end
 
 if 2-3
 	- Money is gold coins that you bet in a casino until you have enough coins to swim in a pool full of them
-	@money-2-3
+	@money-2-5
 	/end
 end
 
 if 4-5
 	- Money is an amount of bottle caps you have. Therefore, we need to build a factory of bottles, produce a bottle, collect a cap from it, throw the bottle away and repeat.
 	@money-rolled-4-5
-	@money-4-5
+	@money-2-5
 	/end
 end
 
 if 6
 	- Money is a number of souls in your possession. First, you bet your soul, win another persons soul, repeat, lose all souls and start over at a bonfire or something 
 	@money-rolled-6
+	@money-f
 	/end
 end
 
 # Dicey-god/money/1
+/image 8
 /rollable @money-rolled-1
 
 	- Being bored after rolling the dice for like 1 minute you decide to take a walk. 
@@ -213,6 +225,7 @@ if 5-6
 end
 
 # Dicey-god/money/4-5
+/image 9
 /rollable @money-rolled-4-5
 
 	- For some reason your personal world starts to be littered with awful amount of bottles
@@ -233,6 +246,7 @@ if 6
 end
 
 # Dicey-god/money/6
+/image 10
 /rollable @money-rolled-6
 
 	- Lately you've noticed that your folk have adopted an interesting taste in music. An epic orchestral music playing on the streets of your small world.... Wait... Why is that guy is all red? Invader!
@@ -248,6 +262,7 @@ if 6
 end
 
 # Dicey-god/game
+/image 11
 /rollable @god
 /weight 50
 
@@ -259,12 +274,13 @@ if 1
 	- Then again. 
 	- The rolled numbers bear no weight for this is an attrition game, you see? Whoever stays last at the table wins. Exiting! A game of wills! Wh...Why are looking at me like that?
 	@game-rolled-1
+	@game-f
 	/end
 end
 
 if 2-3
 	- Two players roll their dice. Whoever has a higher number wins. Easy, effective... Probably, somewhat boring as well.
-	@game-2-3
+	@game-2-5
 	/end
 end
 
@@ -274,7 +290,7 @@ if 4-5
 	- If at your current roll you get a number that was previously rolled by you – you lose Whoever stays the longest wins. 
 	- If you manage to roll all 6 numbers then everyone gets a prize!
 	@game-rolled-4-5
-	@game-4-5
+	@game-2-5
 	/end
 end
 
@@ -285,6 +301,7 @@ if 6
 end
 
 # Dicey-god/game/1
+/image 12
 /rollable @game-rolled-1
 
 	- For some inexplicable reason the game you promoted is not very popular among your dimwitted followers
@@ -300,6 +317,7 @@ if 5-6
 end
 
 # Dicey-god/game/4-5
+/image 13
 /rollable @game-rolled-4-5
 
 	- Your luckyness! The game you proposed is very popular among people. Great success!
@@ -321,6 +339,7 @@ if 6
 end
 
 # Dicey-god/game/fantasy
+/image 14
 /rollable @fantasy
 
 	- Is this just fantasy?
@@ -331,7 +350,8 @@ if 1-6
 end
 
 # Dicey-god/casino/success
-/rollable @money-2-3 or @money-4-5 and @game-2-3 or @game-4-5 and @faithful-1 or @faithful-2 or @faithful-3 or @faithful-6
+/image 15
+/rollable @money-2-5 or @game-2-5 or @faithful-t
 
 	- Finally, it is time to open a casino. 
 	- To be completely honest, these 5 minutes without gambling were utter torture! 
@@ -361,3 +381,20 @@ if 5-6
 	- When all my humble followers will know loss and bad luck, I will make it so that everyone will always win here!
 	/end
 end
+
+# Dicey-god/casino/fail
+/rollable @money-f and @game-f
+
+- Unfortunately, your luckyness, it appears that the primitive people of this land are not beaming with excitement about you shaping their world into a gambling paradise. However, they will reconsider if you will prove your powers by rolling 6.
+
+if 1-5
+	- Pff.. So what are they going to do? I'am a GOD and I own this world!	
+	/end
+end
+
+if 6
+	- Yes!
+	/goto Dicey-god/casino/success
+	/end
+end
+
