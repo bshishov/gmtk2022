@@ -76,6 +76,8 @@ namespace Konklav
         void ShowImage(string imageName);
         void SetTag(string tag);
         bool HasTag(string tag);
+        void Quit();
+        void Wait(float seconds);
     }
 
 
@@ -421,6 +423,32 @@ namespace Konklav
         {
             formatter.Node("Image", ImageName);
         }
+    }
+
+    public class QuitAction : IAction
+    {
+        public void FormatAst(AstFormatter formatter) => formatter.Node("Quit");
+
+        public void Execute(IContext player) => player.Quit();
+    }
+    
+    public class WaitAction : IAction
+    {
+        public readonly INumberExpression Seconds;
+        
+        public WaitAction(INumberExpression seconds)
+        {
+            Seconds = seconds;
+        }
+
+        public void FormatAst(AstFormatter formatter)
+        {
+            formatter.BeginNode("Wait");
+            Seconds.FormatAst(formatter);
+            formatter.EndNode();
+        }
+
+        public void Execute(IContext player) => player.Wait(Seconds.EvaluateAsFloat(player));
     }
 
     public class ActivityAst : IAst
@@ -777,6 +805,12 @@ namespace Konklav
                 case "tag":
                     ReadNonBreakingWhitespace();
                     return new TagAction(ReadNonEmptyStringUntilWhitespace());
+                case "wait":
+                    ReadNonBreakingWhitespace();
+                    var secondsExpression = ReadNumberExpression();
+                    return new WaitAction(secondsExpression);
+                case "quit":
+                    return new QuitAction();
                 case "end":
                     return new EndAction();
                 default:

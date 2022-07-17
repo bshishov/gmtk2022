@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Konklav;
+using UnityEngine;
 
 
 public class Interaction
@@ -107,5 +108,15 @@ public class Player : IContext
     public bool HasTag(string tag)
     {
         return Tags.Contains(tag.ToLowerInvariant());
+    }
+
+    public void Quit()
+    {
+        Schedule(Application.Quit);
+    }
+
+    public void Wait(float seconds)
+    {
+        ScheduleWait(seconds);
     }
 }

@@ -1,0 +1,8 @@
+# no_activity
+- The End
+
+if 1-6
+    - Bye
+    /wait 1
+    /quit
+end
