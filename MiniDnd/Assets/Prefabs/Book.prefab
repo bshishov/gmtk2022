@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PageTransitionTime: 0.5
   PageFlipSound: {fileID: 11400000, guid: 96eadd00f4f14d644a36be0317fe8c96, type: 2}
+  ContentAppear: {fileID: 11400000, guid: 451d5803dd11c65448e3bf4d9294dab4, type: 2}
   RightPage: {fileID: 85883656278250574}
   LeftPage: {fileID: 5449104274795203837}
   Animator: {fileID: 6544837888824283524}

@@ -256,7 +256,10 @@ public class GameManager : MonoBehaviour
                 {
                     nextActivity = RollNewActivity();
                 }
-                
+
+                if (nextActivity == null)
+                    nextActivity = GetActivityByName("no_activity");
+
                 StartActivity(nextActivity);
             });
         }

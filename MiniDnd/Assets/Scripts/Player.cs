@@ -83,7 +83,7 @@ public class Player : IContext
         if (_showTextCallback != null)
         {
             Schedule(() => _showTextCallback(text));
-            ScheduleWait(4f);
+            ScheduleWait(4f + text.Length * 0.05f);
         }
     }
 

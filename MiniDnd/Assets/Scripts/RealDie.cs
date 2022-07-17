@@ -29,6 +29,7 @@ public class RealDie : MonoBehaviour
     [Header("Sounds")] 
     [SerializeField] private SoundAsset ThrowSound; 
     [SerializeField] private SoundAsset CollideSound;
+    [SerializeField] private SoundAsset ThrowCompletedSound;
 
     [Header("Hover")] 
     [SerializeField] private float HoverAnimationTime = 0.2f;
@@ -167,6 +168,7 @@ public class RealDie : MonoBehaviour
                 if (RollSuccessFx != null)
                     Instantiate(RollSuccessFx, transform.position, Quaternion.identity);
                 RollingFinished?.Invoke();
+                SoundManager.Instance.Play(ThrowCompletedSound);
             }
         }
     }

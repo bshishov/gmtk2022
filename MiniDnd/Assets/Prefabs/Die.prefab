@@ -152,6 +152,7 @@ MonoBehaviour:
   YOffset: 2
   ThrowSound: {fileID: 11400000, guid: 2c24a328dd815274490f3f03e5f43cf0, type: 2}
   CollideSound: {fileID: 11400000, guid: 3f85c63d25b0e1747a977fab4123f39c, type: 2}
+  ThrowCompletedSound: {fileID: 11400000, guid: 23358ccbe9236f247ae488893e54207f, type: 2}
   HoverAnimationTime: 0.1
   RollSuccessFx: {fileID: 1210279020206292, guid: 088a2305698fbda4987e422b6bb5e4c2, type: 3}
   CollisionFx: {fileID: 1274793349893442, guid: 02a6f9dd941131e4d85d39332183eeb6, type: 3}
