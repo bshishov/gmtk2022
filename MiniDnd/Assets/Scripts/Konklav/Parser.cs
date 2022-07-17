@@ -801,7 +801,7 @@ namespace Konklav
                     return new WeighAttribAction(ReadNumberExpression());
                 case "goto":
                     ReadNonBreakingWhitespace();
-                    return new GotoAction(ReadNonEmptyStringUntilWhitespace());
+                    return new GotoAction(ReadNonEmptyStringUntilLineBreak());
                 case "tag":
                     ReadNonBreakingWhitespace();
                     return new TagAction(ReadNonEmptyStringUntilWhitespace());
@@ -919,7 +919,7 @@ namespace Konklav
         {
             ReadExact('#');
             ReadNonBreakingWhitespace();
-            var name = ReadNonEmptyStringUntilWhitespace();
+            var name = ReadNonEmptyStringUntilLineBreak();
             ReadLineBreaks();
             var action = ReadCompositeAction();
 
