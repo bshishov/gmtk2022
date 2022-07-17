@@ -66,8 +66,12 @@ public class GameManager : MonoBehaviour
 
             foreach (var activityAst in activities)
             {
-                Debug.Log($"Loaded {activityAst.Name}");
-                
+                var formatter = new AstFormatter();
+                activityAst.FormatAst(formatter);
+
+                Debug.Log($"Loaded {activityAst.Name} \n {formatter}");
+
+
                 var activity = KonklavActivity.FromAst(activityAst);
                 _activities.Add(activity); 
             }
@@ -200,7 +204,7 @@ public class GameManager : MonoBehaviour
 
     private Activity RollActivity()
     {
-        var possible = _activities.Where(e => e.CanBeRolled(_player)).ToList();
+        var possible = _activities.Where(e => e.CanBeRolled(_player) && !_player.Visited(e.Name)).ToList();
         if (!possible.Any())
         {
             Debug.LogWarning("Failed to roll activity... no activities available");
