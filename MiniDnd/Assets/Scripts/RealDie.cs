@@ -55,11 +55,11 @@ public class RealDie : MonoBehaviour
 
     private readonly Vector3[] _sides = {
         Vector3.up,
-        Vector3.forward,
-        Vector3.down,
-        Vector3.back,
         Vector3.left,
+        Vector3.back,
+        Vector3.forward,
         Vector3.right,
+        Vector3.down,
     };
     
     private void Start()

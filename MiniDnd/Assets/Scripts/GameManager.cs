@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PageText;
 
     private Player _player;
-    private List<Activity> _activities;
+    private List<Activity> _activities = new List<Activity>();
     
     private Activity _activeActivity;
     private Dice[] _availableDice;
@@ -22,15 +22,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        _activities = Utils.ConstructAllObjectOfType<Activity>().ToList();
+        LoadKonklavActivities();
+        
+        //foreach (var activity in Utils.ConstructAllObjectOfType<Activity>())
+        // _activities.Add(activity);
         foreach (var encounter in _activities)
         {
             Debug.Log($"Loaded: {encounter}");
         }
-        LoadActivities();
-
-        _player = new Player();
-        StartActivity(_activities.FirstOrDefault(a => a is S1Start));
+        
+        _player = new Player(ShowTextOnCurrentPage);
+        StartActivity(_activities.FirstOrDefault(a => a.Name.Equals("start")));
         
         Dragger.DragCompleted += DraggerOnDragCompleted;
 
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour
         //SelectDie(AttackDie);
     }
 
-    private void LoadActivities()
+    private void LoadKonklavActivities()
     {
         var activitySourceFiles = Resources.LoadAll<TextAsset>("Activities");
         foreach (var sourceFile in activitySourceFiles)
@@ -62,8 +64,19 @@ public class GameManager : MonoBehaviour
             foreach (var activityAst in activities)
             {
                 Debug.Log($"Loaded {activityAst.Name}");
+                
+                var activity = KonklavActivity.FromAst(activityAst);
+                _activities.Add(activity); 
             }
         }
+    }
+
+    private void ShowTextOnCurrentPage(string text)
+    {
+        Book.ChangeText(() =>
+        {
+            PageText.text = text;
+        });
     }
 
     private void Update()
@@ -133,6 +146,7 @@ public class GameManager : MonoBehaviour
         _availableDice = _activeActivity.AvailableDice(_player);
         _player.ShouldStartNewEncounter = false;
         _player.NextExpectedActivity = null;
+        _player.VisitedHashSet.Add(activity.Name);
         _activeActivity.BeforeStart(_player);
         PageText.text = _activeActivity.Text(_player);
     }
@@ -146,7 +160,7 @@ public class GameManager : MonoBehaviour
             return null;
         }
 
-        var rolled = Utils.Choice(possible, e => e.Weight);
+        var rolled = Utils.Choice(possible, e => e.Weight(_player));
         Debug.Log($"Rolled: {rolled}");
         return rolled;
     }
@@ -187,19 +201,8 @@ public class GameManager : MonoBehaviour
             GUILayout.Space(20);
             GUILayout.Label("Text:");
             GUILayout.Label(_activeActivity.Text(_player));
-            
-            GUILayout.Space(20);
-            foreach (var die in _availableDice)
-            {
-                GUILayout.Label(die.ToString());    
-            }
         }
         GUILayout.FlexibleSpace();
-        
-        foreach (var die in _availableDice)
-        {
-            if (GUILayout.Button(die.ToString())) ApplyRoll(DiceRoll.Random(die));
-        }
 
         GUILayout.EndVertical();
         GUILayout.EndArea();

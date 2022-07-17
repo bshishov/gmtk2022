@@ -114,14 +114,14 @@ namespace Konklav
 
     public class TextAction : IAction
     {
-        private readonly string _text;
+        public readonly string Text;
 
         public TextAction(string text)
         {
-            _text = text;
+            Text = text;
         }
 
-        public void Execute(IContext player) => player.ShowText(_text);
+        public void Execute(IContext player) => player.ShowText(Text);
     }
 
     public class GotoAction : IAction
@@ -143,14 +143,14 @@ namespace Konklav
 
     public class CompositeAction : IAction
     {
-        private readonly IEnumerable<IAction> _actions;
+        public readonly IEnumerable<IAction> Actions;
 
-        public CompositeAction(params IAction[] actions) => _actions = actions;
-        public CompositeAction(IEnumerable<IAction> actions) => _actions = actions;
+        public CompositeAction(params IAction[] actions) => Actions = actions;
+        public CompositeAction(IEnumerable<IAction> actions) => Actions = actions;
 
         public void Execute(IContext player)
         {
-            foreach (var action in _actions) action.Execute(player);
+            foreach (var action in Actions) action.Execute(player);
         }
     }
 
@@ -203,7 +203,7 @@ namespace Konklav
         public string Name;
         public IBoolExpression IsRollable;
         public INumberExpression Weight;
-        public IAction Action;
+        public CompositeAction CompositeAction;
     }
 
     public class ParserError : Exception
@@ -525,13 +525,15 @@ namespace Konklav
 
             // First line
             result.Append(ReadNonEmptyStringUntilLineBreak());
-            ReadSingleLineBreak();
 
             while (true)
             {
                 var backtrackTo = _position;
                 try
                 {
+                    ReadSingleLineBreak();            
+                    ReadExact('-');
+                    ReadCharsMaybe(AnyWhitespace, new StringBuilder());
                     var line = ReadNonEmptyStringUntilLineBreak();
                     ReadSingleLineBreak();
                     result.Append("\n");
@@ -568,7 +570,7 @@ namespace Konklav
             return new ConditionalAction(condition, action);
         }
 
-        private IAction ReadCompositeAction()
+        private CompositeAction ReadCompositeAction()
         {
             var actions = new List<IAction> { ReadOneAction() };
 
@@ -596,12 +598,12 @@ namespace Konklav
             ReadNonBreakingWhitespace();
             var name = ReadNonEmptyStringUntilWhitespace();
             ReadLineBreaks();
-            var action = ReadAction();
+            var action = ReadCompositeAction();
 
             return new ActivityAst
             {
                 Name = name,
-                Action = action
+                CompositeAction = action
             };
         }
 

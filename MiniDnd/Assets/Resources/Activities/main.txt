@@ -4,14 +4,21 @@
 
 - Embark on adventure?
 
-? 1-5
-    - Yes
-    /goto greetings
+? 1
+- Ha-ha!
+- Pathetic
 
-? 6
-    - No
-    /end         
+? 2-4
+- Good
+/goto greetings
+
+? 5-6
+- Very nice!
+
+
+
+
 
 
 # greetings 
-- Привет
+- Hmmm..... very nice!

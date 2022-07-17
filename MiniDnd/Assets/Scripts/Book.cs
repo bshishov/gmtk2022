@@ -23,11 +23,24 @@ public class Book : MonoBehaviour
     IEnumerator TransitionRoutine(Action contentUpdateCallback)
     {
         yield return new WaitForSeconds(0.8f);
-        RightPage.TransitionOut(PageTransitionTime);
         LeftPage.TransitionOut(PageTransitionTime);
+        RightPage.TransitionOut(PageTransitionTime);
         yield return new WaitForSeconds(1.0f);
         contentUpdateCallback?.Invoke();
         RightPage.TransitionIn(PageTransitionTime);
+        LeftPage.TransitionIn(PageTransitionTime);
+    }
+
+    public void ChangeText(Action callback)
+    {
+        StartCoroutine(ChangeTextAnimation(callback));
+    }
+
+    private IEnumerator ChangeTextAnimation(Action callback)
+    {
+        LeftPage.TransitionOut(PageTransitionTime);
+        yield return new WaitForSeconds(0.2f);
+        callback?.Invoke();
         LeftPage.TransitionIn(PageTransitionTime);
     }
 }
