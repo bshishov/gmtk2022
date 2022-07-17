@@ -134,7 +134,12 @@ public class GameManager : MonoBehaviour
     private void StartActivity(Activity activity)
     {
         // Finish last
-        _activeActivity?.AfterEnd(_player);
+        if (_activeActivity != null)
+        {
+            _player.Debug("---- End ----");
+            _activeActivity.AfterEnd(_player);    
+        }
+        
 
         // Start new
         if(activity == null)
@@ -147,6 +152,8 @@ public class GameManager : MonoBehaviour
         _player.ShouldStartNewEncounter = false;
         _player.NextExpectedActivity = null;
         _player.VisitedHashSet.Add(activity.Name);
+        _player.CurrentActivity = activity.Name;
+        _player.Debug("---- Start ----");
         _activeActivity.BeforeStart(_player);
         PageText.text = _activeActivity.Text(_player);
     }
@@ -167,7 +174,7 @@ public class GameManager : MonoBehaviour
 
     private void ApplyRoll(DiceRoll rolledDice)
     {
-        Debug.Log($"Rolled dice: {rolledDice}");
+        _player.Debug($"Rolled dice: {rolledDice}");
         _activeActivity.PlayerRoll(_player, rolledDice);
 
         if (_player.ShouldStartNewEncounter)
@@ -187,24 +194,5 @@ public class GameManager : MonoBehaviour
                 StartActivity(nextActivity);
             });
         }
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(10, 10, 300, 600));
-        GUILayout.BeginVertical();
-
-        if (_activeActivity != null)
-        {
-            GUILayout.Label("Current encounter:");
-            GUILayout.Label(_activeActivity.Name);
-            GUILayout.Space(20);
-            GUILayout.Label("Text:");
-            GUILayout.Label(_activeActivity.Text(_player));
-        }
-        GUILayout.FlexibleSpace();
-
-        GUILayout.EndVertical();
-        GUILayout.EndArea();
     }
 }

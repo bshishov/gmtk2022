@@ -10,6 +10,7 @@ public class Player : IContext
     public string NextExpectedActivity;
     public DiceRoll LastDiceRoll;
     public HashSet<string> VisitedHashSet = new HashSet<string>();
+    public string CurrentActivity;
     private readonly Action<string> _showTextCallback;
 
     public Player(Action<string> showTextCallback)
@@ -50,5 +51,10 @@ public class Player : IContext
     public void ShowText(string text)
     {
         _showTextCallback?.Invoke(text);
+    }
+
+    public void Debug(string message)
+    {
+        UnityEngine.Debug.Log($"[{CurrentActivity}] {message}");   
     }
 }

@@ -9,16 +9,13 @@
 - Pathetic
 
 ? 2-4
+// Все что начинается с дефиса - строка для страницы 
 - Good
 /goto greetings
 
-? 5-6
+? 5-6 
 - Very nice!
 
 
-
-
-
-
-# greetings 
+# greetings    
 - Hmmm..... very nice!

@@ -13,6 +13,7 @@ namespace Konklav
         void Goto(string activityName);
         bool Visited(string activityName);
         void End();
+        void Debug(string message);
     }
 
 
@@ -121,7 +122,11 @@ namespace Konklav
             Text = text;
         }
 
-        public void Execute(IContext player) => player.ShowText(Text);
+        public void Execute(IContext player)
+        {
+            player.Debug($"Text: {Text}");
+            player.ShowText(Text);
+        }
     }
 
     public class GotoAction : IAction
@@ -133,12 +138,32 @@ namespace Konklav
             _activityName = activityName;
         }
 
-        public void Execute(IContext player) => player.Goto(_activityName);
+        public void Execute(IContext player)
+        {
+            player.Debug($"/goto {_activityName}");
+            player.Goto(_activityName);
+        }
+    }
+    
+    public class DebugAction : IAction
+    {
+        private readonly string _string;
+
+        public DebugAction(string s)
+        {
+            _string = s;
+        }
+
+        public void Execute(IContext player) => player.Debug(_string);
     }
     
     public class EndAction : IAction
     {
-        public void Execute(IContext player) => player.End();
+        public void Execute(IContext player)
+        {
+            player.Debug($"/end");
+            player.End();
+        }
     }
 
     public class CompositeAction : IAction
@@ -517,6 +542,13 @@ namespace Konklav
             }
         }
 
+        private IAction ReadDebug()
+        {
+            ReadExact("//");
+            var line = ReadNonEmptyStringUntilLineBreak();
+            return new DebugAction(line.Trim());
+        }
+
         private TextAction ReadTextAction()
         {
             ReadExact('-');
@@ -556,6 +588,7 @@ namespace Konklav
 
         private IAction ReadOneAction() => ReadOr(
             ReadCommand,
+            ReadDebug,
             ReadConditional,
             ReadTextAction
         );
