@@ -148,6 +148,9 @@ public class GameManager : MonoBehaviour
     {
         if(Dragger.IsDragging)
             return;
+        
+        if(_animationIsInProgress)
+            return;
 
         if (_selectedDie != null)
             _selectedDie.Unselect();
@@ -258,6 +261,7 @@ public class GameManager : MonoBehaviour
             });
         }
 
+        yield return new WaitForSeconds(2f);
         _animationIsInProgress = false;
     }
 
