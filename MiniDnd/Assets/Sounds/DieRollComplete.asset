@@ -15,12 +15,12 @@ MonoBehaviour:
   Clip: {fileID: 8300000, guid: d16ad149dbf233b488ec113b46c58375, type: 3}
   Loop: 0
   MixerGroup: {fileID: 0}
-  VolumeModifier: 1
+  VolumeModifier: 0.5
   Delay: 0
   RandomizeDelay: 0
   MaxAdditionalDelay: 0
   IgnoreListenerPause: 0
   Group: {fileID: 0}
   Pitch: 1
-  RandomizePitch: 0
+  RandomizePitch: 1
   MaxPitchShift: 0.05

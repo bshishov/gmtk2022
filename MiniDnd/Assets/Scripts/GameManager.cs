@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
             }));
         };
 
+        SelectDie(AttackDie);
         BeginStory();
     }
 
