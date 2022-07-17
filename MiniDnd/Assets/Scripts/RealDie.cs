@@ -86,6 +86,8 @@ public class RealDie : MonoBehaviour
     public void Throw(Vector3 impulse)
     {
         _body.isKinematic = false;
+
+        impulse *= ThrowForce;
         
         Debug.Log($"Throwing cube {impulse}");
         _body.AddForceAtPosition(impulse, transform.position + new Vector3(0, YOffset + 2, 0));

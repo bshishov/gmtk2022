@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Activities;
 using Konklav;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -16,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PageText;
 
     private Player _player;
-    private List<Activity> _activities = new List<Activity>();
+    private readonly List<Activity> _activities = new List<Activity>();
     
     private Activity _activeActivity;
     private Dice[] _availableDice;
@@ -38,12 +36,7 @@ public class GameManager : MonoBehaviour
                 Value = AttackDie.Value
             });
         };
-        
-        //DefenceDie.MouseEnter += () => { SelectDie(DefenceDie); };
-        //DefenceDie.MouseExit += () => { SelectDie(null); };
-        
-        //SelectDie(AttackDie);
-        
+
         BeginStory();
     }
 
@@ -140,10 +133,12 @@ public class GameManager : MonoBehaviour
 
     private void DraggerOnDragCompleted(Vector2 direction)
     {
-        if (_selectedDie != null)
+        if (_selectedDie != null && _selectedDie.State == RealDie.DieState.Selected)
         {
+            var relativeDragDelta = new Vector2(direction.x / Screen.width, direction.y / Screen.height);
+            
             _selectedDie.Unselect();
-            _selectedDie.Throw(new Vector3(direction.x, 0, direction.y) * 1f);
+            _selectedDie.Throw(new Vector3(relativeDragDelta.x, 0, relativeDragDelta.y));
         }
     }
 
@@ -216,14 +211,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private Vector2 _scrollPosition;
     
     private void OnGUI()
     {
         if (_showGui)
         {
-            GUILayout.BeginArea(new Rect(0, 0, Screen.width * 0.5f, Screen.height));
+            GUILayout.BeginArea(new Rect(0, 0, 200, Screen.height));
             _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
             foreach (var activity in _activities)
             {
